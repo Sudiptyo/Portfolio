@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import adminReducer from "./Admin/admin";
+import feedbackReducer from "./Feedback/Feedback";
 
 export const store = configureStore({
   reducer: {
     admin: adminReducer,
+    feedback: feedbackReducer,
   },
 });
 

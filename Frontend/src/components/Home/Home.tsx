@@ -79,10 +79,7 @@ const OrbitDot = ({
 
 const Home = () => {
   return (
-    <section
-      id="home"
-      className="relative min-h-screen flex items-center mt-1"
-    >
+    <section id="home" className="relative min-h-screen flex items-center mt-1">
       <div className="grid lg:grid-cols-2 gap-16 items-center w-full ">
         {/* ================= LEFT ================= */}
 

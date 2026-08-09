@@ -63,7 +63,7 @@ export const feedbackSchemaValidator = z.object({
     .number()
     .min(1, "Rating must be at least 1")
     .max(5, "Rating must be at most 5"),
-  status: z.enum(STATUS_TYPES).optional().default(Status_Type.PENDING),
+  status: z.enum(STATUS_TYPES).optional().default(Status_Type.APPROVED),
   comment: z
     .string()
     .trim()

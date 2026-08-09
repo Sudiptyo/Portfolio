@@ -86,7 +86,7 @@ const checkEmailStatus = asyncHandler(async (req, res) => {
         : null,
     },
   });
-});  
+});
 
 const submitFeedback = asyncHandler(async (req, res) => {
   console.log("submitFeedback: ", req.body);
@@ -124,7 +124,7 @@ const submitFeedback = asyncHandler(async (req, res) => {
     email: data.email,
     role: data.role,
     rating: data.rating,
-    status: data.status,
+    status: data.status || Status_Type.APPROVED,
     comment: data.comment,
     profileImage,
   });
@@ -161,7 +161,7 @@ const getFeedback = asyncHandler(async (req, res) => {
   } = {};
 
   if (status) {
-    filter.status = status;
+    filter.status = status.toLowerCase() as StatusType;
   } else {
     filter.status = Status_Type.APPROVED;
   }

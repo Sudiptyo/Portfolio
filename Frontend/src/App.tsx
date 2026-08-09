@@ -1,4 +1,4 @@
-import { Element } from "react-scroll";
+import { Element, scroller } from "react-scroll";
 
 import Container from "./components/Layout/Container";
 import Home from "./components/Home/Home";
@@ -8,13 +8,40 @@ import ProblemSolving from "./Pages/ProblemSolving/ProblemSolving";
 import Services from "./Pages/Services/Services";
 import Portfolio from "./Pages/Portfolio/Portfolio";
 import Experience from "./Pages/Experience/Experience";
-import Contact from "./Pages/Contact/Contact";
 import DeepDive from "./Pages/DeepDive/DeepDive";
 import Education from "./Pages/Education/Education";
 import Testimonial from "./Pages/Testimonial/Testimonial";
 import Footer from "./Pages/Footer/Footer";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const App = () => {
+  const location = useLocation();
+  // useEffect(() => {
+  //   if (location.state && (location.state as { scrollTo?: any }).scrollTo) {
+  //     const target = (location.state as { scrollTo?: any }).scrollTo;
+  //     scroller.scrollTo(target, {
+  //       duration: state.scrollDuration || 500,
+  //       delay: 0,
+  //       smooth: "easeInOutQuart",
+  //       offset: -80,
+  //     });
+  //   }
+  // }, [location]);
+
+  useEffect(() => {
+  const state = location.state as { scrollTo?: string; scrollDuration?: number } | null;
+
+  if (state?.scrollTo) {
+    scroller.scrollTo(state.scrollTo, {
+      duration: state.scrollDuration ?? 500, // Uses 2500ms for feedback submit, 500ms for everything else
+      delay: 100,
+      smooth: "easeInOutCubic",
+      offset: -80,
+    });
+  }
+}, [location]);
+
   return (
     <>
       <Element name="home">
@@ -71,7 +98,7 @@ const App = () => {
         <Education />
       </Container>
 
-      <Element name="portfolio">
+      <Element name="testimonial">
         <div className="bg-[hsl(253_45%_15%)]/30 mt-35">
           <Container>
             <Testimonial />

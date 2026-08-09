@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 import { FeedbackValidationRules } from "@/Utils/FeedbackValidation";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LuSend } from "react-icons/lu";
 import { Star } from "lucide-react";
 import { FiCamera } from "react-icons/fi";
@@ -43,6 +43,7 @@ const ratingLabels = {
 
 const FeedbackForm = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -151,6 +152,10 @@ const FeedbackForm = () => {
       setImageFile(null);
       setPreview("");
       reset();
+
+      navigate("/", {
+        state: { scrollTo: "testimonial", scrollDuration: 2000 },
+      });
     } catch (err) {
       console.error(err);
     }

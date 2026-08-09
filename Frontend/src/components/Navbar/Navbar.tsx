@@ -1,5 +1,5 @@
-import { NavLink, useLocation } from "react-router-dom";
-import type { NavLinkRenderProps } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 import { LuShieldCheck } from "react-icons/lu";
 import { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
@@ -10,12 +10,8 @@ const Navbar = () => {
   const isAdmin = useSelector((state: RootState) => state.admin.isAdmin);
 
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const standAlonePage = ["/contact", "/admin", "/feedback"].includes(pathname);
-
-  const navLinkStyle = ({ isActive }: NavLinkRenderProps): string =>
-    `text-sm font-medium text-muted-foreground hover:text-white transition-colors duration-200 ${
-      isActive ? "text-white" : "text-gray-400 hover:text-white"
-    }`;
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -28,6 +24,20 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const navItems = [
+    { label: "About", to: "about" },
+    { label: "Skills", to: "skills" },
+    { label: "Services", to: "services" },
+    { label: "Portfolio", to: "portfolio" },
+    { label: "Experience", to: "experience" },
+  ];
+
+  const handleNavClick = (target: string) => {
+    if (pathname !== "/") {
+      navigate("/", { state: { scrollTo: target } });
+    }
+  };
 
   return (
     <div
@@ -42,11 +52,11 @@ const Navbar = () => {
   `}
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6">
-        <a href="/">
+        <NavLink to="/" onClick={() => (window.location.href = "/")}>
           <h2 className="text-3xl font-bold tracking-tighter bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 bg-clip-text text-transparent pl-6">
             Sudiptyo
           </h2>
-        </a>
+        </NavLink>
         {standAlonePage ? (
           <NavLink to="/">
             <button className="flex items-center gap-2 group text-base font-medium text-[#AAA3C2] transition-all duration-200">
@@ -56,35 +66,22 @@ const Navbar = () => {
           </NavLink>
         ) : (
           <ul className="flex items-center gap-6 -translate-x-5">
-            <li>
-              <NavLink className={navLinkStyle} to="/about">
-                About
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink className={navLinkStyle} to="/skills">
-                Skills
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink className={navLinkStyle} to="/services">
-                Services
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink className={navLinkStyle} to="/portfolio">
-                Portfolio
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink className={navLinkStyle} to="/experience">
-                Experience
-              </NavLink>
-            </li>
+            {navItems.map((item) => (
+              <li key={item.to}>
+                <ScrollLink
+                  to={item.to}
+                  smooth={true}
+                  duration={500}
+                  spy={true}
+                  offset={-80}
+                  onClick={() => handleNavClick(item.to)}
+                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer"
+                  activeClass="text-white"
+                >
+                  {item.label}
+                </ScrollLink>
+              </li>
+            ))}
 
             <li>
               <NavLink

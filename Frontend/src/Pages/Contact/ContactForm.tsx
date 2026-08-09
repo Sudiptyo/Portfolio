@@ -99,6 +99,7 @@ const ContactForm = () => {
       const res = await dispatch(submitContact(data)).unwrap();
       console.log(res);
       reset();
+      navigate("/");
     } catch (err) {
       console.log(err);
       reset();
