@@ -4,7 +4,6 @@ import {
   Status_Type,
   TestimonialComment,
 } from "../Models/Testimonial.model.js";
-import { sendMail } from "../Utils/nodeMailer.js";
 import { z } from "zod";
 import {
   contactSchemaValidator,
@@ -12,8 +11,8 @@ import {
   updateFeedbackSchemaValidator,
 } from "../Utils/zodValidator.js";
 import { StatusType, RoleType } from "../Models/Testimonial.model.js";
-import { contactConfirmationEmail } from "../Template/contact.template.js";
 import { uploadOnCloudinary } from "../Utils/Cloudinary.js";
+import { emailProducer } from "../Services/Queue/producer.service.js";
 
 type ContactData = z.infer<typeof contactSchemaValidator>;
 type FeedbackData = z.infer<typeof feedbackSchemaValidator>;
@@ -33,19 +32,36 @@ const submitContactMe = asyncHandler(async (req, res) => {
     message: data.message,
   });
 
-  try {
-    await sendMail({
+  // await sendContactConfirmationEmail({
+  //   to: contact.email,
+  //   name: contact.fullName,
+  //   projectType: contact.projectType,
+  //   budget: contact.budgetRange,
+  // });
+  emailProducer
+    .addContactConfirmation({
       to: contact.email,
-      subject: "Thanks for reaching out 🚀",
-      html: contactConfirmationEmail({
-        name: contact.fullName,
-        projectType: contact.projectType,
-        budget: contact.budgetRange,
-      }),
+      name: contact.fullName,
+      projectType: contact.projectType,
+      budget: contact.budgetRange,
+    })
+    .catch((err) => {
+      console.error("Failed to send confirmation email:", err);
     });
-  } catch (err) {
-    console.error(err);
-  }
+
+  // try {
+  //   await sendMail({
+  //     to: contact.email,
+  //     subject: "Thanks for reaching out 🚀",
+  //     html: contactConfirmationEmail({
+  //       name: contact.fullName,
+  //       projectType: contact.projectType,
+  //       budget: contact.budgetRange,
+  //     }),
+  //   });
+  // } catch (err) {
+  //   console.error(err);
+  // }
 
   return res.status(201).json({
     success: true,
@@ -128,6 +144,23 @@ const submitFeedback = asyncHandler(async (req, res) => {
     comment: data.comment,
     profileImage,
   });
+
+  // await sendContactConfirmationEmail({
+  //   to: testimonial.email,
+  //   name: testimonial.fullName,
+  //   projectType: testimonial.role,
+  //   budget: testimonial.rating,
+  // });
+
+  emailProducer
+    .addFeedbackThankYou({
+      to: testimonial.email,
+      name: testimonial.fullName,
+      rating: testimonial.rating,
+    })
+    .catch((err) => {
+      console.error("Failed to send Feedback email", err);
+    });
 
   return res.status(201).json({
     success: true,

@@ -6,13 +6,8 @@ import {
   StatusType,
   TestimonialComment,
 } from "../Models/Testimonial.model.js";
-import { sendMail } from "../Utils/nodeMailer.js";
 import { CookieOptions } from "express";
-import {
-  approvedProjectEmail,
-  pendingProjectEmail,
-  rejectedProjectEmail,
-} from "../Template/status.template.js";
+import { emailProducer } from "../Services/Queue/producer.service.js";
 
 const cookieOptions: CookieOptions = {
   httpOnly: true,
@@ -33,10 +28,6 @@ interface CheckEmailBody {
 interface UpdateProjectBody {
   status: StatusType;
   message?: string;
-}
-
-interface CheckEmailBody {
-  email: string;
 }
 
 const checkEmailStatus = asyncHandler(async (req, res) => {
@@ -187,42 +178,96 @@ const updateProjectStatus = asyncHandler(async (req, res) => {
 
   await contact.save({ validateBeforeSave: false });
 
-  let subject = "";
-  let html = "";
+  // let subject = "";
+  // let html = "";
 
-  switch (status) {
-    case Status_Type.APPROVED:
-      subject = "Project Accepted 🎉";
-      html = approvedProjectEmail(contact.fullName);
+  // switch (status) {
+  //   case Status_Type.APPROVED:
+  //     subject = "Project Accepted 🎉";
+  //     await sendApprovedProjectEmail({
+  //       to: contact.email,
+  //       name: contact.fullName,
+  //     });
+  //     // html = approvedProjectEmail(contact.fullName);
 
-      break;
-    case Status_Type.REJECTED:
-      subject = "Project Rejected";
-      html = rejectedProjectEmail(contact.fullName, message);
+  //     break;
+  //   case Status_Type.REJECTED:
+  //     subject = "Project Rejected";
+  //     await sendRejectedProjectEmail({
+  //       to: contact.email,
+  //       name: contact.fullName,
+  //       message,
+  //     });
+  //     // html = rejectedProjectEmail(contact.fullName, message);
 
-      break;
-    case Status_Type.PENDING:
-      subject = "Project Update (Pending)";
-      html = pendingProjectEmail(contact.fullName, message);
-      break;
+  //     break;
+  //   case Status_Type.PENDING:
+  //     subject = "Project Update (Pending)";
+  //     await sendPendingProjectEmail({
+  //       to: contact.email,
+  //       name: contact.fullName,
+  //       message,
+  //     });
+  //     // html = pendingProjectEmail(contact.fullName, message);
+  //     break;
 
-    default:
-      return res.status(400).json({
-        success: false,
-        message: "Invalid status",
-      });
-  }
+  //   default:
+  //     return res.status(400).json({
+  //       success: false,
+  //       message: "Invalid status",
+  //     });
+  // }
+
+  // if (prevStatus !== status) {
+  //   // send email
+
+  //   await sendMail({
+  //     to: contact.email,
+  //     subject,
+  //     html,
+  //   }).catch((err) => {
+  //     console.error("Error sending status update email: ", err);
+  //   });
+  // }
 
   if (prevStatus !== status) {
-    // send email
+    switch (status) {
+      case Status_Type.APPROVED:
+        emailProducer
+          .addProjectApproved({
+            to: contact.email,
+            name: contact.fullName,
+          })
+          .catch((err) => {
+            console.error("Failed to queue approved email:", err);
+          });
 
-    await sendMail({
-      to: contact.email,
-      subject,
-      html,
-    }).catch((err) => {
-      console.error("Error sending status update email: ", err);
-    });
+        break;
+
+      case Status_Type.REJECTED:
+        emailProducer
+          .addProjectRejected({
+            to: contact.email,
+            name: contact.fullName,
+            message,
+          })
+          .catch((err) => {
+            console.error("Failed to queue rejected email:", err);
+          });
+        break;
+
+      case Status_Type.PENDING:
+        emailProducer
+          .addProjectPending({
+            to: contact.email,
+            name: contact.fullName,
+            message,
+          })
+          .catch((err) => {
+            console.error("Failed to queue pending email:", err);
+          });
+        break;
+    }
   }
 
   return res.status(200).json({

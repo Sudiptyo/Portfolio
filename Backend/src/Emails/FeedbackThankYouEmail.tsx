@@ -1,0 +1,284 @@
+// // Emails/FeedbackThankYouEmail.tsx
+
+// import * as React from "react";
+// import { Button, Section, Text } from "@react-email/components";
+
+// import BaseTemplate from "../Template/BaseTemplate.js";
+
+// interface FeedbackThankYouEmailProps {
+//   name: string;
+//   rating: number;
+// }
+
+// export default function FeedbackThankYouEmail({
+//   name,
+//   rating,
+// }: FeedbackThankYouEmailProps) {
+//   return (
+//     <BaseTemplate preview="Thanks for sharing your feedback!">
+//       <Text style={greeting}>
+//         Hi <strong>{name || "there"}</strong>,
+//       </Text>
+
+//       <Text style={paragraph}>
+//         Thank you for taking the time to leave your feedback. Your opinion
+//         genuinely helps me improve my work and provide a better experience for
+//         future clients.
+//       </Text>
+
+//       <Section style={card}>
+//         <Text style={label}>Your Rating</Text>
+
+//         <Text style={value}>
+//           {"⭐".repeat(rating)} ({rating}/5)
+//         </Text>
+
+//         <Text style={label}>Status</Text>
+
+//         <Text style={value}>Successfully received ✅</Text>
+//       </Section>
+
+//       <Text style={paragraph}>
+//         Your feedback has been recorded successfully.
+//       </Text>
+
+//       <Text style={paragraph}>
+//         I truly appreciate your support and hope we get the opportunity to work
+//         together again in the future.
+//       </Text>
+
+//       <Section style={buttonSection}>
+//         <Button href="https://your-portfolio.com" style={button}>
+//           Visit My Portfolio
+//         </Button>
+//       </Section>
+
+//       <Text style={paragraph}>Thanks again for your valuable feedback! 💙</Text>
+
+//       <Text style={signature}>
+//         Best regards,
+//         <br />
+//         <strong>Sudiptyo Das</strong>
+//         <br />
+//         <span style={{ color: "#9CA3AF" }}>Full Stack Developer</span>
+//       </Text>
+//     </BaseTemplate>
+//   );
+// }
+
+// const greeting = {
+//   color: "#F9FAFB",
+//   fontSize: "16px",
+//   lineHeight: "28px",
+// };
+
+// const paragraph = {
+//   color: "#D1D5DB",
+//   fontSize: "15px",
+//   lineHeight: "28px",
+// };
+
+// const card = {
+//   backgroundColor: "#1F2937",
+//   border: "1px solid #374151",
+//   borderRadius: "12px",
+//   padding: "20px",
+//   margin: "28px 0",
+// };
+
+// const label = {
+//   color: "#9CA3AF",
+//   fontSize: "13px",
+//   marginBottom: "4px",
+// };
+
+// const value = {
+//   color: "#F9FAFB",
+//   fontSize: "16px",
+//   fontWeight: "600",
+//   marginTop: "0",
+//   marginBottom: "18px",
+// };
+
+// const buttonSection = {
+//   textAlign: "center" as const,
+//   margin: "36px 0",
+// };
+
+// const button = {
+//   background: "linear-gradient(135deg,#2563EB,#7C3AED)",
+//   color: "#FFFFFF",
+//   padding: "14px 26px",
+//   borderRadius: "10px",
+//   textDecoration: "none",
+//   fontWeight: "600",
+//   fontSize: "15px",
+// };
+
+// const signature = {
+//   color: "#D1D5DB",
+//   fontSize: "15px",
+//   lineHeight: "28px",
+//   marginTop: "32px",
+// };
+
+import * as React from "react";
+import { Button, Section, Text } from "@react-email/components";
+import BaseTemplate from "../Template/BaseTemplate.js";
+
+interface FeedbackThankYouEmailProps {
+  name: string;
+  rating: number;
+}
+
+export default function FeedbackThankYouEmail({
+  name,
+  rating,
+}: FeedbackThankYouEmailProps) {
+  return (
+    <BaseTemplate
+      preview="Thank you for sharing your feedback!"
+      accentColor="#F59E0B"
+      accentLabel="Feedback Received"
+    >
+      <Text style={greeting}>
+        Hi <strong>{name || "there"}</strong>,
+      </Text>
+
+      <Text style={paragraph}>
+        Thank you for taking the time to share your experience. Your feedback is
+        genuinely appreciated and helps me continuously improve the quality of
+        my work and the experience I provide to every client.
+      </Text>
+
+      <Section style={card}>
+        <Text style={cardTitle}>⭐ Feedback Summary</Text>
+
+        <Section style={item}>
+          <Text style={label}>Your Rating</Text>
+          <Text style={value}>
+            {"⭐".repeat(rating)} ({rating}/5)
+          </Text>
+        </Section>
+
+        <Section style={item}>
+          <Text style={label}>Submission Status</Text>
+          <Text style={status}>Successfully Received</Text>
+        </Section>
+      </Section>
+
+      <Section style={highlightCard}>
+        <Text style={highlightTitle}>Thank You!</Text>
+
+        <Text style={highlightText}>
+          Your opinion is valuable and helps build trust for future clients.
+          Thank you for your support and for being part of my journey.
+        </Text>
+      </Section>
+
+      <Text style={paragraph}>
+        I truly appreciate the opportunity to work with you and hope our paths
+        cross again on future projects.
+      </Text>
+
+      <Section style={buttonSection}>
+        <Button href="https://your-portfolio.com" style={button}>
+          Visit My Portfolio
+        </Button>
+      </Section>
+    </BaseTemplate>
+  );
+}
+
+const greeting = {
+  color: "#111827",
+  fontSize: "16px",
+  lineHeight: "28px",
+  marginBottom: "16px",
+};
+
+const paragraph = {
+  color: "#4B5563",
+  fontSize: "15px",
+  lineHeight: "28px",
+  margin: "0 0 20px",
+};
+
+const card = {
+  backgroundColor: "#FFFBEB",
+  border: "1px solid #FDE68A",
+  borderLeft: "5px solid #F59E0B",
+  borderRadius: "12px",
+  padding: "24px",
+  margin: "32px 0",
+};
+
+const cardTitle = {
+  color: "#92400E",
+  fontSize: "17px",
+  fontWeight: "700",
+  margin: "0 0 20px",
+};
+
+const item = {
+  marginBottom: "18px",
+};
+
+const label = {
+  color: "#6B7280",
+  fontSize: "13px",
+  textTransform: "uppercase" as const,
+  letterSpacing: "0.5px",
+  margin: "0 0 6px",
+};
+
+const value = {
+  color: "#111827",
+  fontSize: "16px",
+  fontWeight: "600",
+  margin: 0,
+};
+
+const status = {
+  color: "#B45309",
+  fontSize: "16px",
+  fontWeight: "600",
+  margin: 0,
+};
+
+const highlightCard = {
+  backgroundColor: "#FFF7ED",
+  border: "1px solid #FED7AA",
+  borderRadius: "12px",
+  padding: "22px",
+  margin: "30px 0",
+};
+
+const highlightTitle = {
+  color: "#C2410C",
+  fontSize: "16px",
+  fontWeight: "700",
+  margin: "0 0 12px",
+};
+
+const highlightText = {
+  color: "#9A3412",
+  fontSize: "14px",
+  lineHeight: "26px",
+  margin: 0,
+};
+
+const buttonSection = {
+  textAlign: "center" as const,
+  margin: "36px 0 12px",
+};
+
+const button = {
+  backgroundColor: "#F59E0B",
+  color: "#FFFFFF",
+  padding: "14px 26px",
+  borderRadius: "8px",
+  textDecoration: "none",
+  fontSize: "15px",
+  fontWeight: "600",
+};
