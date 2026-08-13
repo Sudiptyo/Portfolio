@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import { app } from "./App.js";
+import { app } from "./App.js"; 
 import { connectDb } from "./Db/db.js";
 import { initAdmin } from "./Utils/seedAdmin.js";
 
