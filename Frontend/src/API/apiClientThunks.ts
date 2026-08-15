@@ -25,6 +25,17 @@ export interface FeedbackPayload {
   comment: string;
 }
 
+export interface FeedbackItem {
+  _id: string;
+  fullName: string;
+  email?: string;
+  role: string;
+  rating: number;
+  comment: string;
+  profileImage?: string;
+  createdAt: string;
+}
+
 export interface UpdateFeedbackPayload {
   id: string;
   fullName?: string;
@@ -43,6 +54,12 @@ interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
   data: T;
+  pagination?: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -150,11 +167,41 @@ export const submitFeedback = createAsyncThunk<
 });
 
 /* -------------------------------------------------------------------------- */
+/*                            GET TOP FEEDBACK                                */
+/* -------------------------------------------------------------------------- */
+
+export const getTopFeedback = createAsyncThunk<
+  ApiResponse<FeedbackItem[]>,
+  { refresh?: boolean } | undefined,
+  { rejectValue: string }
+>("feedback/getTop", async (params = {}, { rejectWithValue }) => {
+  try {
+    const res = await Axios.get<ApiResponse<FeedbackItem[]>>(
+      API.FEEDBACK.GET_TOP,
+      {
+        params,
+      },
+    );
+
+    return res.data;
+  } catch (err) {
+    let message = "Unable to fetch top feedback.";
+
+    if (axios.isAxiosError(err)) {
+      message = err.response?.data?.message || message;
+    }
+
+    console.error(err);
+    return rejectWithValue(message);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
 /*                               GET FEEDBACK                                 */
 /* -------------------------------------------------------------------------- */
 
-export const getFeeedback = createAsyncThunk<
-  ApiResponse,
+export const getFeedback = createAsyncThunk<
+  ApiResponse<FeedbackItem[]>,
   {
     page?: number;
     limit?: number;
@@ -166,7 +213,10 @@ export const getFeeedback = createAsyncThunk<
   { rejectValue: string }
 >("feedback/getAll", async (params = {}, { rejectWithValue }) => {
   try {
-    const res = await Axios.get(API.FEEDBACK.GET_ALL, { params });
+    const res = await Axios.get<ApiResponse<FeedbackItem[]>>(
+      API.FEEDBACK.GET_ALL,
+      { params },
+    );
 
     return res.data;
   } catch (err) {

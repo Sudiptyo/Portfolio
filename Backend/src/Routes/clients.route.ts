@@ -6,6 +6,7 @@ import {
   updateFeedbackByEmail,
   deleteFeedbackByEmail,
   checkEmailStatus,
+  getTopFeedbackCached,
 } from "../Controllers/client.controller.js";
 import { validate } from "../Middleware/validation.middleware.js";
 import {
@@ -25,12 +26,13 @@ router.post(
   submitFeedback,
 );
 router.get("/check-email-status", checkEmailStatus);
-router.get("/get-feedback", getFeedback);
+router.get("/feedback/top", getTopFeedbackCached);
+router.get("/feedback", getFeedback);
 router.patch(
-  "/update-feedback/:id",
+  "/feedback/:id",
   validate(updateFeedbackSchemaValidator),
   updateFeedbackByEmail,
 );
-router.delete("/delete-feedback/:id", deleteFeedbackByEmail);
+router.delete("/feedback/:id", deleteFeedbackByEmail);
 
 export default router;

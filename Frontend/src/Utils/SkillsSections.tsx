@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 
-import { 
+import {
   Binary,
   Blocks,
   Box,
@@ -46,6 +46,10 @@ import { RiTailwindCssLine } from "react-icons/ri";
 import { RiReactjsLine } from "react-icons/ri";
 import { FaNodeJs } from "react-icons/fa";
 import { SiApachemaven } from "react-icons/si";
+import { FaDocker } from "react-icons/fa";
+import { SiNextdotjs } from "react-icons/si";
+import { SiRabbitmq } from "react-icons/si";
+import { SiRedbull } from "react-icons/si";
 
 type Skill = {
   idx: number;
@@ -129,18 +133,24 @@ export const SkillsSectionData: SkillSection[] = [
       },
       {
         idx: 2,
+        name: "Next.js",
+        icon: SiNextdotjs,
+        hoverText: "React framework for full-stack web apps",
+      },
+      {
+        idx: 3,
         name: "Tailwind CSS",
         icon: RiTailwindCssLine,
         hoverText: "Utility-first CSS framework",
       },
       {
-        idx: 3,
+        idx: 4,
         name: "Responsive Design",
         icon: Smartphone,
         hoverText: "Mobile-first development",
       },
       {
-        idx: 4,
+        idx: 5,
         name: "Performance Optimization",
         icon: TrendingUp,
         hoverText: "Core Web Vitals & speed optimization",
@@ -170,7 +180,7 @@ export const SkillsSectionData: SkillSection[] = [
         idx: 3,
         name: "Spring Boot",
         icon: Leaf,
-        hoverText: "Java backend framework",
+        hoverText: "Production-ready Java backend framework",
       },
       {
         idx: 4,
@@ -180,18 +190,30 @@ export const SkillsSectionData: SkillSection[] = [
       },
       {
         idx: 5,
+        name: "BullMQ",
+        icon: SiRedbull,
+        hoverText: "Redis-backed background job processing",
+      },
+      {
+        idx: 6,
+        name: "RabbitMQ",
+        icon: SiRabbitmq,
+        hoverText: "Message broker for asynchronous communication",
+      },
+      {
+        idx: 7,
         name: "Authentication",
         icon: Key,
         hoverText: "JWT, OAuth & session management",
       },
       {
-        idx: 6,
+        idx: 8,
         name: "DB Management",
         icon: Database,
         hoverText: "Database schema design & queries",
       },
       {
-        idx: 7,
+        idx: 9,
         name: "WebSockets",
         icon: WifiSync,
         hoverText: "Real-time bidirectional communication",
@@ -264,33 +286,39 @@ export const SkillsSectionData: SkillSection[] = [
       },
       {
         idx: 6,
+        name: "Docker",
+        icon: FaDocker,
+        hoverText: "Containerization & application deployment",
+      },
+      {
+        idx: 7,
         name: "Figma",
         icon: FiFigma,
         hoverText: "UI/UX design & prototyping",
       },
       {
-        idx: 7,
+        idx: 8,
         name: "Vite",
         icon: Zap,
         hoverText: "Lightning-fast frontend build tool",
       },
       {
-        idx: 8,
+        idx: 9,
         name: "NPM",
         icon: SiNpm,
         hoverText: "Package management for JS",
-      },
-      {
-        idx: 9,
-        name: "PIP",
-        icon: PackageOpen,
-        hoverText: "Python package manager",
       },
       {
         idx: 10,
         name: "Maven",
         icon: SiApachemaven,
         hoverText: "Java build & dependency management",
+      },
+      {
+        idx: 11,
+        name: "PIP",
+        icon: PackageOpen,
+        hoverText: "Python package manager",
       },
     ],
   },

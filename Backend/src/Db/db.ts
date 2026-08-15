@@ -7,7 +7,7 @@ const connectDb = async () => {
     if (!MONGO_URI) {
       throw new Error("MONGO_URI is missing."); // Without this: connect() receives -> string | undefined
     }
-
+  
     await connect(MONGO_URI);
     console.log("✅ MongoDB connected");
   } catch (err: unknown) {

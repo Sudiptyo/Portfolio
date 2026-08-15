@@ -13,6 +13,12 @@ import {
 import { StatusType, RoleType } from "../Models/Testimonial.model.js";
 import { uploadOnCloudinary } from "../Utils/Cloudinary.js";
 import { emailProducer } from "../Services/Queue/producer.service.js";
+import {
+  addFeedbackToCache,
+  clearBestFeedback,
+  getBestFeedback,
+  setBestFeedback,
+} from "../Services/Cache/feedback.service.js";
 
 type ContactData = z.infer<typeof contactSchemaValidator>;
 type FeedbackData = z.infer<typeof feedbackSchemaValidator>;
@@ -125,15 +131,6 @@ const submitFeedback = asyncHandler(async (req, res) => {
     }
   }
 
-  // const contactExists = await Contact.findById(data.contactId);
-
-  // if (!contactExists) {
-  //   return res.status(404).json({
-  //     success: false,
-  //     message: "Contact not found",
-  //   });
-  // }
-
   const testimonial = await TestimonialComment.create({
     contactId: contactId || undefined,
     fullName: data.fullName,
@@ -145,12 +142,22 @@ const submitFeedback = asyncHandler(async (req, res) => {
     profileImage,
   });
 
-  // await sendContactConfirmationEmail({
-  //   to: testimonial.email,
-  //   name: testimonial.fullName,
-  //   projectType: testimonial.role,
-  //   budget: testimonial.rating,
-  // });
+  if (testimonial.status === Status_Type.APPROVED) {
+    try {
+      await addFeedbackToCache({
+        _id: testimonial._id.toString(),
+        fullName: testimonial.fullName,
+        role: testimonial.role,
+        rating: testimonial.rating,
+        comment: testimonial.comment,
+        createdAt: testimonial.createdAt,
+        profileImage: testimonial.profileImage,
+      });
+    } catch (err) {
+      // Redis failure should NOT make feedback submission fail.
+      console.error("Failed to update feedback cache:", err);
+    }
+  }
 
   emailProducer
     .addFeedbackThankYou({
@@ -170,10 +177,77 @@ const submitFeedback = asyncHandler(async (req, res) => {
   });
 });
 
+const getTopFeedbackCached = asyncHandler(async (req, res) => {
+  const forceRefresh = req.query.refresh === "true";
+
+  /*
+   * Manual refresh:
+   * Clear Redis first so MongoDB becomes the source of truth.
+   */
+  if (forceRefresh) {
+    try {
+      await clearBestFeedback();
+      console.log("🔄 Manual feedback refresh → Redis cleared");
+    } catch (err) {
+      console.error("Failed to clear feedback cache:", err);
+    }
+  }
+
+  // Try Redis first unless manually refreshing
+  if (!forceRefresh) {
+    const cachedFeedback = await getBestFeedback();
+
+    if (cachedFeedback) {
+      return res.status(200).json({
+        success: true,
+        source: "redis",
+        data: cachedFeedback,
+      });
+    }
+  }
+
+  // Cache MISS / forced refresh → MongoDB
+  const feedbacks = await TestimonialComment.find({
+    status: Status_Type.APPROVED,
+    isDeleted: false,
+  })
+    .select("fullName role rating comment createdAt profileImage")
+    .sort({
+      rating: -1,
+      createdAt: -1,
+    })
+    .limit(5)
+    .lean();
+
+  try {
+    await setBestFeedback(
+      feedbacks.map((feedback) => ({
+        _id: feedback._id.toString(),
+        fullName: feedback.fullName,
+        role: feedback.role,
+        rating: feedback.rating,
+        comment: feedback.comment,
+        createdAt: feedback.createdAt
+          ? new Date(feedback.createdAt).toISOString()
+          : new Date().toISOString(),
+        profileImage: feedback.profileImage,
+      })),
+    );
+  } catch (err) {
+    console.error("Failed to populate feedback cache:", err);
+  }
+
+  return res.status(200).json({
+    success: true,
+    source: forceRefresh ? "mongodb-refresh" : "mongodb",
+    data: feedbacks,
+  });
+});
+
 const getFeedback = asyncHandler(async (req, res) => {
-  const page = Math.max(Number(req.query.page) || 1, 1);
-  const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50);
-  const skip = (page - 1) * limit;
+  const page = Math.max(Number(req.query.page) || 1, 1); // Ensure page is at least 1
+  const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50); // Limit to a maximum of 50
+  const skip = (page - 1) * limit; // Calculate the number of documents to skip
 
   const {
     status,
@@ -268,6 +342,12 @@ const updateFeedbackByEmail = asyncHandler(async (req, res) => {
     });
   }
 
+  try {
+    await clearBestFeedback();
+  } catch (err) {
+    console.error("Failed to clear feedback cache:", err);
+  }
+
   return res.status(200).json({
     success: true,
     message: "Feedback updated successfully",
@@ -300,6 +380,12 @@ const deleteFeedbackByEmail = asyncHandler(async (req, res) => {
     });
   }
 
+  try {
+    await clearBestFeedback();
+  } catch (err) {
+    console.error("Failed to clear feedback cache:", err);
+  }
+
   return res.status(200).json({
     success: true,
     message: "Feedback deleted successfully",
@@ -310,6 +396,7 @@ export {
   submitContactMe,
   submitFeedback,
   checkEmailStatus,
+  getTopFeedbackCached,
   getFeedback,
   updateFeedbackByEmail,
   deleteFeedbackByEmail,

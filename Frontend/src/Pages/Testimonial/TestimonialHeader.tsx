@@ -1,4 +1,4 @@
-// import { getFeeedback } from "@/API/apiClientThunks";
+// import { getFeedback } from "@/API/apiClientThunks";
 // import { useAppDispatch, useAppSelector } from "@/Hooks/ReduxHooks";
 // import type { RootState } from "@/store/store";
 // import { LuRefreshCw } from "react-icons/lu";
@@ -11,7 +11,7 @@
 //   );
 //   const handleRefresh = () => {
 //     dispatch(
-//       getFeeedback({
+//       getFeedback({
 //         page: 1,
 //         limit: 10,
 //         status: "APPROVED",
@@ -69,7 +69,7 @@
 
 // export default TestimonialHeader;
 
-import { getFeeedback } from "@/API/apiClientThunks";
+import { getTopFeedback } from "@/API/apiClientThunks";
 import { useAppDispatch, useAppSelector } from "@/Hooks/ReduxHooks";
 import type { RootState } from "@/store/store";
 import { LuRefreshCw } from "react-icons/lu";
@@ -83,13 +83,14 @@ const TestimonialHeader = () => {
 
   const handleRefresh = () => {
     dispatch(
-      getFeeedback({
-        page: 1,
-        limit: 10,
-        status: "approved",
-        sortBy: "rating",
-        order: "desc",
-      }),
+      getTopFeedback({ refresh: true }),
+      // getFeedback({
+      //   page: 1,
+      //   limit: 10,
+      //   status: "approved",
+      //   sortBy: "rating",
+      //   order: "desc",
+      // }),
     );
   };
 

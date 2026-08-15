@@ -22,8 +22,9 @@ export const API = {
   FEEDBACK: {
     CHECK_EMAIL_STATUS: `${API_BASE.CLIENT}/check-email-status`,
     SUBMIT: `${API_BASE.CLIENT}/feedback`,
-    GET_ALL: `${API_BASE.CLIENT}/get-feedback`,
-    UPDATE: (id: string) => `${API_BASE.CLIENT}/update-feedback/${id}`,
-    DELETE: (id: string) => `${API_BASE.CLIENT}/delete-feedback/${id}`,
+    GET_TOP: `${API_BASE.CLIENT}/feedback/top`,
+    GET_ALL: `${API_BASE.CLIENT}/feedback`,
+    UPDATE: (id: string) => `${API_BASE.CLIENT}/feedback/${id}`,
+    DELETE: (id: string) => `${API_BASE.CLIENT}/feedback/${id}`,
   },
 } as const;
