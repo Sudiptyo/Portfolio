@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { createTransport, SentMessageInfo } from "nodemailer";
+import { logger } from "./logger.js";
 
 interface SendMailOptions {
   to: string;
@@ -21,8 +22,8 @@ const transporter = createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  logger: true,
-  debug: true,
+  logger: false,
+  debug: false,
 });
 
 const sendMail = async ({
@@ -38,11 +39,16 @@ const sendMail = async ({
       html,
     });
 
-    console.log("📩 Email sent:", info.messageId);
+    logger.info(
+      {
+        messageId: info.messageId,
+      },
+      "Email sent successfully",
+    );
 
     return info;
   } catch (err) {
-    console.error("❌ Error sending email: ", err);
+    logger.error({ err }, "Failed to send email");
     throw err;
   }
 };

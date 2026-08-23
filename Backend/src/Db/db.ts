@@ -1,4 +1,5 @@
 import { connect } from "mongoose";
+import { logger } from "../Utils/logger.js";
 
 const connectDb = async () => {
   try {
@@ -7,18 +8,18 @@ const connectDb = async () => {
     if (!MONGO_URI) {
       throw new Error("MONGO_URI is missing."); // Without this: connect() receives -> string | undefined
     }
-  
+
     await connect(MONGO_URI);
-    console.log("✅ MongoDB connected");
+    logger.info("MongoDB connected");
   } catch (err: unknown) {
     if (err instanceof Error) {
-      console.error("❌ MongoDB connection error:", err.message);
+      logger.error({ err: err }, "MongoDB connection error:");
     } else {
-      console.error("❌ Unknown MongoDB connection error");
+      logger.error("Unknown MongoDB connection error");
     }
 
     process.exit(1); // Stop the server if DB connection fails
   }
 };
 
-export { connectDb }; 
+export { connectDb };

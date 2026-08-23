@@ -8,6 +8,7 @@ import {
   sendPendingProjectEmail,
   sendRejectedProjectEmail,
 } from "../Email/email.service.js";
+import { logger } from "../../Utils/logger.js";
 
 const worker = new Worker(
   "emails",
@@ -44,17 +45,31 @@ const worker = new Worker(
 );
 
 worker.on("completed", (job) => {
-  console.log(`Email job completed ! ${job.id}, ${job.name}, ${job.data}`);
+  logger.info(
+    {
+      jobId: job.id,
+      jobName: job.name,
+    },
+    "Email job completed",
+  );
 });
 
 worker.on("failed", (job, err) => {
   if (!job) {
-    console.error(err);
+    logger.error({ err }, "Email job failed without job information");
     return;
   }
 
-  console.error(`Email job failed! ${job.id} ${job.name}`, err.message);
+  logger.error(
+    {
+      err,
+      jobId: job.id,
+      jobName: job.name,
+    },
+    "Email job failed",
+  );
 });
+
 worker.on("error", (err) => {
-  console.error("Email worker error: ", err);
+  logger.error({ err }, "Email worker error");
 });

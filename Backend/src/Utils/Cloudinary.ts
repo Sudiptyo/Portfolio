@@ -1,5 +1,6 @@
 import { v2 as cloudinary, type UploadApiResponse } from "cloudinary";
 import fs from "node:fs";
+import { logger } from "./logger.js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -17,7 +18,13 @@ const uploadOnCloudinary = async (
       resource_type: "image",
     });
 
-    console.log("✅ File uploaded to Cloudinary:", response.secure_url);
+    logger.info(
+      {
+        publicId: response.public_id,
+        resourceType: response.resource_type,
+      },
+      "File uploaded to Cloudinary",
+    );
 
     fs.unlinkSync(localFilePath);
 
@@ -27,7 +34,7 @@ const uploadOnCloudinary = async (
       fs.unlinkSync(localFilePath);
     }
 
-    console.error("❌ Cloudinary upload failed:", error);
+    logger.error({ err: error }, "Cloudinary upload failed");
 
     return null;
   }

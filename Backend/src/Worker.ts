@@ -1,3 +1,4 @@
 import "./Services/Queue/Worker.service.js";
+import { logger } from "./Utils/logger.js";
 
-console.log("🚀 Email Worker Started");
+logger.info("Email Worker Started");

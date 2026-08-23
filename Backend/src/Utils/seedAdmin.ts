@@ -1,4 +1,5 @@
 import { Admin } from "../Models/Admin.model.js";
+import { logger } from "./logger.js";
 
 const initAdmin = async () => {
   try {
@@ -7,7 +8,7 @@ const initAdmin = async () => {
     const adminName = process.env.ADMIN_FULL_NAME;
 
     if (!adminEmail || !adminPassword) {
-      console.warn("⚠️ Admin credentials not set in .env file");
+      logger.warn("Admin credentials not set in .env file");
       return;
     }
 
@@ -22,15 +23,15 @@ const initAdmin = async () => {
         password: adminPassword,
       });
 
-      console.log(`✅ Default admin created: ${adminEmail}`);
+      logger.info("Default admin created");
     } else {
       existingAdmin.password = adminPassword;
       await existingAdmin.save(); // pre("save") hashes it
 
-      console.log(`🔄 Admin password updated.`);
-    } 
-  } catch (error) {
-    console.error("❌ Error initializing admin:", error);
+      logger.info("Admin password updated.");
+    }
+  } catch (err) {
+    logger.error({ err: err }, "Failed to initialize admin");
   }
 };
 

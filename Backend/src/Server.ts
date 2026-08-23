@@ -6,6 +6,7 @@ import { app } from "./App.js";
 import { connectDb } from "./Db/db.js";
 import { initAdmin } from "./Utils/seedAdmin.js";
 import { redis } from "./Services/Redis/redis.service.js";
+import { logger } from "./Utils/logger.js";
 
 // const PORT: number = Number(process.env.PORT) || 3000;
 const PORT = Number(process.env.PORT ?? "3000");
@@ -19,13 +20,16 @@ const startServer = async () => {
     await connectDb();
     await initAdmin();
     app.listen(PORT, () => {
-      console.log(`⚙️  Server is running on port ${PORT}`);
+      logger.info({ port: PORT }, "Server is running on port");
     });
   } catch (err: unknown) {
     if (err instanceof Error) {
-      console.error("❌ Failed to start server:", err.message);
+      logger.error({ err: err }, "Failed to start server:");
     } else {
-      console.error("❌ Failed to start server due to an unknown error.");
+      logger.error(
+        { err: err },
+        "Failed to start server due to an unknown error.",
+      );
     }
 
     process.exit(1);

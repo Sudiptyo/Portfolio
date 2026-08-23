@@ -1,3 +1,4 @@
+import { logger } from "../../Utils/logger.js";
 import { redis } from "../Redis/redis.service.js";
 
 const BEST_FEEDBACK_KEY = "feedback:best";
@@ -21,18 +22,21 @@ const getBestFeedback = async (): Promise<CachedFeedback[] | null> => {
   const cached = await redis.get(BEST_FEEDBACK_KEY);
 
   if (!cached) {
-    console.log("🟡 Feedback cache MISS");
+    logger.debug("Feedback cache miss");
     return null;
   }
 
   try {
     const feedback = JSON.parse(cached) as CachedFeedback[];
 
-    console.log("🟢 Feedback cache HIT");
+    logger.debug("Feedback cache hit");
 
     return feedback;
   } catch (err) {
-    console.error("Failed to parse feedback cache:", err);
+    logger.warn(
+      { err },
+      "Failed to parse feedback cache; clearing corrupted cache",
+    );
 
     await redis.del(BEST_FEEDBACK_KEY);
 
@@ -61,7 +65,7 @@ const setBestFeedback = async (feedbacks: CachedFeedback[]): Promise<void> => {
     BEST_FEEDBACK_TTL,
   );
 
-  console.log(`🟢 Feedback cache SET → ${bestFive.length} feedback(s)`);
+  logger.debug({ count: bestFive.length }, "Feedback cache set");
 };
 
 /**
@@ -88,8 +92,8 @@ const addFeedbackToCache = async (
    * The next GET will fetch the actual top 5 from MongoDB.
    */
   if (!current) {
-    console.log(
-      "🟡 No existing feedback cache. MongoDB will rebuild it on next GET.",
+    logger.debug(
+      "No existing feedback cache; MongoDB will rebuild it on next request",
     );
 
     return;
@@ -121,13 +125,13 @@ const addFeedbackToCache = async (
 
   await setBestFeedback(bestFive);
 
-  console.log("⭐ Feedback cache updated");
+  logger.debug({ count: bestFive.length }, "Feedback cache updated");
 };
 
 const clearBestFeedback = async () => {
   await redis.del(BEST_FEEDBACK_KEY);
 
-  console.log("🗑️ Feedback cache cleared");
+  logger.info("Feedback cache cleared");
 };
 
 export {

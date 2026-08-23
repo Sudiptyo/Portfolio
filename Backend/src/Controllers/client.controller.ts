@@ -19,13 +19,20 @@ import {
   getBestFeedback,
   setBestFeedback,
 } from "../Services/Cache/feedback.service.js";
+import { logger } from "../Utils/logger.js";
 
 type ContactData = z.infer<typeof contactSchemaValidator>;
 type FeedbackData = z.infer<typeof feedbackSchemaValidator>;
 type UpdateFeedbackData = z.infer<typeof updateFeedbackSchemaValidator>;
 
 const submitContactMe = asyncHandler(async (req, res) => {
-  console.log("submitContactMe: ", req.body);
+  logger.info(
+    {
+      fullName: req.body.fullName,
+      projectType: req.body.projectType,
+    },
+    "Contact form submitted",
+  );
 
   const data = req.validatedData as ContactData;
 
@@ -38,12 +45,6 @@ const submitContactMe = asyncHandler(async (req, res) => {
     message: data.message,
   });
 
-  // await sendContactConfirmationEmail({
-  //   to: contact.email,
-  //   name: contact.fullName,
-  //   projectType: contact.projectType,
-  //   budget: contact.budgetRange,
-  // });
   emailProducer
     .addContactConfirmation({
       to: contact.email,
@@ -52,22 +53,11 @@ const submitContactMe = asyncHandler(async (req, res) => {
       budget: contact.budgetRange,
     })
     .catch((err) => {
-      console.error("Failed to send confirmation email:", err);
+      logger.error(
+        { err, email: contact.email },
+        "Failed to queue contact confirmation email",
+      );
     });
-
-  // try {
-  //   await sendMail({
-  //     to: contact.email,
-  //     subject: "Thanks for reaching out 🚀",
-  //     html: contactConfirmationEmail({
-  //       name: contact.fullName,
-  //       projectType: contact.projectType,
-  //       budget: contact.budgetRange,
-  //     }),
-  //   });
-  // } catch (err) {
-  //   console.error(err);
-  // }
 
   return res.status(201).json({
     success: true,
@@ -111,7 +101,13 @@ const checkEmailStatus = asyncHandler(async (req, res) => {
 });
 
 const submitFeedback = asyncHandler(async (req, res) => {
-  console.log("submitFeedback: ", req.body);
+  logger.info(
+    {
+      fullName: req.body.fullName,
+      rating: req.body.rating,
+    },
+    "Feedback submitted",
+  );
 
   const data = req.validatedData as FeedbackData;
 
@@ -155,7 +151,7 @@ const submitFeedback = asyncHandler(async (req, res) => {
       });
     } catch (err) {
       // Redis failure should NOT make feedback submission fail.
-      console.error("Failed to update feedback cache:", err);
+      logger.warn({ err }, "Failed to update feedback cache");
     }
   }
 
@@ -166,7 +162,13 @@ const submitFeedback = asyncHandler(async (req, res) => {
       rating: testimonial.rating,
     })
     .catch((err) => {
-      console.error("Failed to send Feedback email", err);
+      logger.error(
+        {
+          err,
+          email: testimonial.email,
+        },
+        "Failed to queue feedback thank-you email",
+      );
     });
 
   return res.status(201).json({
@@ -187,9 +189,9 @@ const getTopFeedbackCached = asyncHandler(async (req, res) => {
   if (forceRefresh) {
     try {
       await clearBestFeedback();
-      console.log("🔄 Manual feedback refresh → Redis cleared");
+      logger.info({ source: "manual" }, "Feedback cache cleared");
     } catch (err) {
-      console.error("Failed to clear feedback cache:", err);
+      logger.warn({ err }, "Failed to clear feedback cache");
     }
   }
 
@@ -234,7 +236,7 @@ const getTopFeedbackCached = asyncHandler(async (req, res) => {
       })),
     );
   } catch (err) {
-    console.error("Failed to populate feedback cache:", err);
+    logger.warn({ err }, "Failed to populate feedback cache");
   }
 
   return res.status(200).json({
@@ -313,7 +315,13 @@ const getFeedback = asyncHandler(async (req, res) => {
 
 const updateFeedbackByEmail = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  console.log("update Feedback: ", req.body);
+  logger.info(
+    {
+      feedbackId: id,
+      rating: req.body.rating,
+    },
+    "Feedback update requested",
+  );
 
   const data = req.validatedData as UpdateFeedbackData;
 
@@ -345,7 +353,10 @@ const updateFeedbackByEmail = asyncHandler(async (req, res) => {
   try {
     await clearBestFeedback();
   } catch (err) {
-    console.error("Failed to clear feedback cache:", err);
+    logger.warn(
+      { err, feedbackId: id },
+      "Failed to clear feedback cache after feedback update",
+    );
   }
 
   return res.status(200).json({
@@ -383,7 +394,10 @@ const deleteFeedbackByEmail = asyncHandler(async (req, res) => {
   try {
     await clearBestFeedback();
   } catch (err) {
-    console.error("Failed to clear feedback cache:", err);
+    logger.warn(
+      { err, feedbackId: id },
+      "Failed to clear feedback cache after feedback deletion",
+    );
   }
 
   return res.status(200).json({
