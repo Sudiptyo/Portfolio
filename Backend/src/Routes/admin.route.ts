@@ -3,7 +3,9 @@ import {
   adminLogin,
   adminLogout,
   checkEmailStatus,
+  getAdminDashboardActivity,
   getAdminDashboardStats,
+  getCurrentAdmin,
   toggleFeaturedFeedback,
   updateProjectStatus,
 } from "../Controllers/admin.controller.js";
@@ -29,5 +31,7 @@ router.patch(
 );
 router.patch("/feedback/:id/featured", verifyAdmin, toggleFeaturedFeedback);
 router.get("/dashboard", verifyAdmin, getAdminDashboardStats);
+router.get("/dashboard/activity", verifyAdmin, getAdminDashboardActivity);
+router.get("/me", verifyAdmin, getCurrentAdmin);
 
 export default router;

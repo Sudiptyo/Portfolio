@@ -1,10 +1,15 @@
 import { FaGithub } from "react-icons/fa";
+
 import { FiLinkedin } from "react-icons/fi";
+
 import { LuMail } from "react-icons/lu";
 
 const socialClass = `
+  relative
+  z-10
   flex
   size-12
+  cursor-pointer
   items-center
   justify-center
   rounded-full
@@ -47,8 +52,9 @@ const FooterHeader = () => {
               >
                 Contact Me
               </a>
+
               <a
-                href="/Frontend/public/CV.pdf"
+                href="/CV.pdf"
                 download="Sudiptyo_Das_CV.pdf"
                 className="rounded-full border-2 border-[hsl(263_83%_63%)]/50 px-10 py-5 text-center text-lg font-bold text-white transition-colors hover:bg-[hsl(263_83%_63%)]/10"
               >
@@ -56,14 +62,26 @@ const FooterHeader = () => {
               </a>
             </div>
 
-            <div className="flex flex-wrap gap-4">
-              <a href="#" className={socialClass}>
+            <div className="relative z-10 flex flex-wrap gap-4">
+              <a
+                href="https://github.com/Sudiptyo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={socialClass}
+              >
                 <FaGithub size={20} />
               </a>
-              <a href="#" className={socialClass}>
+
+              <a
+                href="https://www.linkedin.com/in/sudiptyo-undefined-776472432?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={socialClass}
+              >
                 <FiLinkedin size={20} />
               </a>
-              <a href="#" className={socialClass}>
+
+              <a href="mailto:sudiptyo.dev@gmail.com" className={socialClass}>
                 <LuMail size={20} />
               </a>
             </div>

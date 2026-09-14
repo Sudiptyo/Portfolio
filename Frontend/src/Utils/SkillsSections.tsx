@@ -3,14 +3,9 @@ import type { ComponentType } from "react";
 import {
   Binary,
   Blocks,
-  Box,
   Boxes,
-  CodeXml,
-  Coffee,
   Database,
   DatabaseZap,
-  FileBraces,
-  FileCode,
   Globe,
   HardDrive,
   Key,
@@ -19,15 +14,11 @@ import {
   MonitorCog,
   Network,
   PackageOpen,
-  PanelsTopLeft,
-  Server,
   ServerCog,
   ShieldCheck,
   Smartphone,
-  SquareTerminal,
   TrendingUp,
   WifiSync,
-  Wind,
   Workflow,
   Zap,
 } from "lucide-react";
@@ -50,6 +41,7 @@ import { FaDocker } from "react-icons/fa";
 import { SiNextdotjs } from "react-icons/si";
 import { SiRabbitmq } from "react-icons/si";
 import { SiRedbull } from "react-icons/si";
+import { SiFastify } from "react-icons/si";
 
 type Skill = {
   idx: number;
@@ -172,48 +164,54 @@ export const SkillsSectionData: SkillSection[] = [
       },
       {
         idx: 2,
+        name: "Node.js/Fastify",
+        icon: SiFastify,
+        hoverText: "High-performance Node.js web framework",
+      },
+      {
+        idx: 3,
         name: "Django",
         icon: Boxes,
         hoverText: "Python web framework",
       },
       {
-        idx: 3,
+        idx: 4,
         name: "Spring Boot",
         icon: Leaf,
         hoverText: "Production-ready Java backend framework",
       },
       {
-        idx: 4,
+        idx: 5,
         name: "Redis",
         icon: DatabaseZap,
         hoverText: "In-memory caching & data store",
       },
       {
-        idx: 5,
+        idx: 6,
         name: "BullMQ",
         icon: SiRedbull,
         hoverText: "Redis-backed background job processing",
       },
       {
-        idx: 6,
+        idx: 7,
         name: "RabbitMQ",
         icon: SiRabbitmq,
         hoverText: "Message broker for asynchronous communication",
       },
       {
-        idx: 7,
+        idx: 8,
         name: "Authentication",
         icon: Key,
         hoverText: "JWT, OAuth & session management",
       },
       {
-        idx: 8,
+        idx: 9,
         name: "DB Management",
         icon: Database,
         hoverText: "Database schema design & queries",
       },
       {
-        idx: 9,
+        idx: 10,
         name: "WebSockets",
         icon: WifiSync,
         hoverText: "Real-time bidirectional communication",

@@ -17,7 +17,7 @@ const PortfolioGrid = () => {
         }) => (
           <div
             key={id}
-            className="w-142.5 overflow-hidden rounded-[28px] border border-white/8 bg-[#211B36] shadow-[0_0_0_1px_rgba(255,255,255,0.02)]"
+            className="w-full overflow-hidden rounded-[28px] border border-white/8 bg-[#211B36] shadow-[0_0_0_1px_rgba(255,255,255,0.02)]"
           >
             {/* ================= Header ================= */}
             <div

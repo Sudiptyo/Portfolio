@@ -9,6 +9,7 @@ import type { AppDispatch } from "@/store/store";
 import { submitContact } from "@/API/apiClientThunks";
 import { checkAdminEmail, loginAdmin } from "@/API/apiAdminThunks";
 import { useNavigate } from "react-router-dom";
+import { uiLogger } from "@/Config/Logger";
 
 const Project_Type = [
   "Web Development",
@@ -21,7 +22,7 @@ const Project_Type = [
   "Other",
 ];
 
-type ContactFormData = {
+type ContactFormData = { 
   fullName: string;
   email: string;
   projectType: string;
@@ -65,7 +66,9 @@ const ContactForm = () => {
           setShowAdminPasswordModal(true);
         }
       } catch (err) {
-        console.error("Admin verification check failed:", err);
+        uiLogger.warn("Admin email verification failed", {
+          error: err,
+        });
       }
     }, 600);
 
@@ -86,9 +89,14 @@ const ContactForm = () => {
 
       setShowAdminPasswordModal(false);
       setAdminPassword("");
-      navigate("/admin");
-    } catch (err: any) {
-      setAdminAuthError(err || "Invalid admin password");
+      navigate("/admin/dashboard");
+    } catch (err: unknown) {
+      uiLogger.warn("Admin login failed", {
+        error: err,
+      });
+      setAdminAuthError(
+        typeof err === "string" ? err : "Invalid admin password",
+      );
     } finally {
       setIsVerifyingPassword(false);
     }
@@ -101,7 +109,9 @@ const ContactForm = () => {
       reset();
       navigate("/");
     } catch (err) {
-      console.log(err);
+      uiLogger.error("Contact form submission failed", {
+        error: err,
+      });
       reset();
     }
   };
@@ -117,7 +127,9 @@ const ContactForm = () => {
       >
         <form
           onSubmit={handleSubmit(onSubmit, (errors) => {
-            console.log("Validation errors:", errors);
+            uiLogger.debug("Contact form validation failed", {
+              fields: Object.keys(errors),
+            });
           })}
           className="flex flex-col gap-6"
         >
@@ -184,7 +196,11 @@ const ContactForm = () => {
                 </option>
 
                 {Project_Type.map((type) => (
-                  <option key={type} value={type} className="bg-[#090616] text-white">
+                  <option
+                    key={type}
+                    value={type}
+                    className="bg-[#090616] text-white"
+                  >
                     {type}
                   </option>
                 ))}

@@ -33,11 +33,29 @@ interface CheckEmailResponse {
   } | null;
 }
 
-interface DashboardStats {
-  totalFeedbacks: number;
-  pendingFeedbacks: number;
-  averageRating: number;
+interface DashboardChartData {
+  date: string;
+  contacts: number;
+  feedbacks: number;
 }
+
+interface DashboardStats {
+  contacts: {
+    total: number;
+    pending: number;
+    approved: number;
+    approvalRate: number;
+  };
+
+  feedbacks: {
+    total: number;
+    pending: number;
+    featured: number;
+    averageRating: number;
+  };
+}
+
+type DashboardRange = 7 | 30 | 90 | "all";
 
 interface LoginPayload {
   email: string;
@@ -48,7 +66,7 @@ interface checkEmailPayload {
   email: string;
 }
 
-interface UpdateProjectPayload {
+interface UpdateProjectStatusPayload {
   id: string;
   status: "pending" | "approved" | "rejected";
   message?: string;
@@ -139,6 +157,30 @@ export const logoutAdmin = createAsyncThunk<
 });
 
 /* -------------------------------------------------------------------------- */
+/*                                Get Current Admin                                      */
+/* -------------------------------------------------------------------------- */
+
+export const getCurrentAdmin = createAsyncThunk<
+  ApiResponse<Admin>,
+  void,
+  { rejectValue: string }
+>("admin/me", async (_, { rejectWithValue }) => {
+  try {
+    const res = await Axios.get<ApiResponse<Admin>>(API.ADMIN.ME);
+
+    return res.data;
+  } catch (error) {
+    let message = "Unable to restore admin session.";
+
+    if (axios.isAxiosError(error)) {
+      message = error.response?.data?.message ?? message;
+    }
+
+    return rejectWithValue(message);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
 /*                           DASHBOARD STATS                                  */
 /* -------------------------------------------------------------------------- */
 
@@ -161,6 +203,33 @@ export const getDashboardStats = createAsyncThunk<
     }
 
     toast.error(message);
+
+    return rejectWithValue(message);
+  }
+});
+
+export const getDashboardActivity = createAsyncThunk<
+  ApiResponse<DashboardChartData[]>,
+  DashboardRange,
+  { rejectValue: string }
+>("admin/dashboardActivity", async (range, { rejectWithValue }) => {
+  try {
+    const res = await Axios.get<ApiResponse<DashboardChartData[]>>(
+      API.ADMIN.DASHBOARD_ACTIVITY,
+      {
+        params: {
+          range,
+        },
+      },
+    );
+
+    return res.data;
+  } catch (error) {
+    let message = "Unable to fetch dashboard activity.";
+
+    if (axios.isAxiosError(error)) {
+      message = error.response?.data?.message ?? message;
+    }
 
     return rejectWithValue(message);
   }
@@ -207,9 +276,7 @@ export const toggleFeatured = createAsyncThunk<
   { rejectValue: string }
 >("admin/toggleFeatured", async ({ id }, { rejectWithValue }) => {
   try {
-    const res = await Axios.patch<ApiResponse>(
-      API.ADMIN.TOGGLE_FEATURED(id),
-    );
+    const res = await Axios.patch<ApiResponse>(API.ADMIN.TOGGLE_FEATURED(id));
 
     toast.success(res.data.message);
 

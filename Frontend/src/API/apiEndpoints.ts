@@ -8,7 +8,9 @@ export const API = {
     CHECK_EMAIL_STATUS: `${API_BASE.ADMIN}/check-email-status`,
     LOGIN: `${API_BASE.ADMIN}/login-admin`,
     LOGOUT: `${API_BASE.ADMIN}/logout-admin`,
+    ME: `${API_BASE.ADMIN}/me`,
     DASHBOARD: `${API_BASE.ADMIN}/dashboard`,
+    DASHBOARD_ACTIVITY: `${API_BASE.ADMIN}/dashboard/activity`,
     UPDATE_PROJECT_STATUS: (id: string) =>
       `${API_BASE.ADMIN}/update-project-status/${id}/status`,
     TOGGLE_FEATURED: (id: string) =>

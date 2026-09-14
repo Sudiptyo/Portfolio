@@ -8,10 +8,13 @@ import {
 } from "../Models/Testimonial.model.js";
 import { CookieOptions } from "express";
 import { emailProducer } from "../Services/Queue/producer.service.js";
+import { logger } from "../Utils/logger.js";
+
+const isProduction = process.env.NODE_ENV === "production";
 
 const cookieOptions: CookieOptions = {
   httpOnly: true,
-  secure: false,
+  secure: isProduction,
   sameSite: "lax",
   maxAge: 24 * 60 * 60 * 1000,
 };
@@ -31,11 +34,10 @@ interface UpdateProjectBody {
 }
 
 const checkEmailStatus = asyncHandler(async (req, res) => {
-  console.log("Admin Checking:", req.body);
-
   const { email } = req.body as CheckEmailBody;
 
   const normalizedEmail = email?.trim().toLowerCase();
+  logger.info({ email: normalizedEmail }, "Admin email status check");
 
   if (!normalizedEmail) {
     return res.status(400).json({
@@ -69,39 +71,6 @@ const checkEmailStatus = asyncHandler(async (req, res) => {
     allowFeedback: !!isClient || !!isAdmin,
   });
 });
-
-// const checkEmailStatus = asyncHandler(async (req, res) => {
-//   const { email } = req.validatedData as CheckEmailBody;
-//   console.log("Admin Checking: ", req.body);
-
-//   if (!email) {
-//     return res.status(400).json({ success: false, message: "Email required" });
-//   }
-
-//   const [isAdmin, isClient, feedback] = await Promise.all([
-//     Admin.exists({ email }),
-//     Contact.exists({ email }),
-//     TestimonialComment.findOne({ email, isDeleted: false }).select(
-//       "fullName role rating comment status",
-//     ), // Check if the user has submitted feedback before and retrieve it for pre-filling the form if they are an admin or client. Only non-deleted feedback is considered.
-//   ]);
-
-//   return res.status(200).json({
-//     success: true,
-//     isAdmin: !!isAdmin,
-//     isClient: !!isClient,
-//     hasFeedback: !!feedback,
-//     feedback: feedback
-//       ? {
-//           fullName: feedback.fullName,
-//           role: feedback.role,
-//           rating: feedback.rating,
-//           comment: feedback.comment,
-//         }
-//       : null,
-//     allowFeedback: !!isClient || !!isAdmin,
-//   });
-// });
 
 const adminLogin = asyncHandler(async (req, res) => {
   const data = req.validatedData as AdminLoginBody;
@@ -178,58 +147,6 @@ const updateProjectStatus = asyncHandler(async (req, res) => {
 
   await contact.save({ validateBeforeSave: false });
 
-  // let subject = "";
-  // let html = "";
-
-  // switch (status) {
-  //   case Status_Type.APPROVED:
-  //     subject = "Project Accepted 🎉";
-  //     await sendApprovedProjectEmail({
-  //       to: contact.email,
-  //       name: contact.fullName,
-  //     });
-  //     // html = approvedProjectEmail(contact.fullName);
-
-  //     break;
-  //   case Status_Type.REJECTED:
-  //     subject = "Project Rejected";
-  //     await sendRejectedProjectEmail({
-  //       to: contact.email,
-  //       name: contact.fullName,
-  //       message,
-  //     });
-  //     // html = rejectedProjectEmail(contact.fullName, message);
-
-  //     break;
-  //   case Status_Type.PENDING:
-  //     subject = "Project Update (Pending)";
-  //     await sendPendingProjectEmail({
-  //       to: contact.email,
-  //       name: contact.fullName,
-  //       message,
-  //     });
-  //     // html = pendingProjectEmail(contact.fullName, message);
-  //     break;
-
-  //   default:
-  //     return res.status(400).json({
-  //       success: false,
-  //       message: "Invalid status",
-  //     });
-  // }
-
-  // if (prevStatus !== status) {
-  //   // send email
-
-  //   await sendMail({
-  //     to: contact.email,
-  //     subject,
-  //     html,
-  //   }).catch((err) => {
-  //     console.error("Error sending status update email: ", err);
-  //   });
-  // }
-
   if (prevStatus !== status) {
     switch (status) {
       case Status_Type.APPROVED:
@@ -239,7 +156,10 @@ const updateProjectStatus = asyncHandler(async (req, res) => {
             name: contact.fullName,
           })
           .catch((err) => {
-            console.error("Failed to queue approved email:", err);
+            logger.error(
+              { err, contactId: contact.id },
+              "Failed to queue approved project email",
+            );
           });
 
         break;
@@ -252,7 +172,10 @@ const updateProjectStatus = asyncHandler(async (req, res) => {
             message,
           })
           .catch((err) => {
-            console.error("Failed to queue rejected email:", err);
+            logger.error(
+              { err, contactId: contact.id },
+              "Failed to queue rejected project email",
+            );
           });
         break;
 
@@ -264,7 +187,10 @@ const updateProjectStatus = asyncHandler(async (req, res) => {
             message,
           })
           .catch((err) => {
-            console.error("Failed to queue pending email:", err);
+            logger.error(
+              { err, contactId: contact.id },
+              "Failed to queue pending project email",
+            );
           });
         break;
     }
@@ -299,33 +225,509 @@ const toggleFeaturedFeedback = asyncHandler(async (req, res) => {
   });
 });
 
-const getAdminDashboardStats = asyncHandler(async (req, res) => {
-  const [totalFeedback, pendingFeedback, avgRatingResult] = await Promise.all([
+// const getAdminDashboardStats = asyncHandler(async (req, res) => {
+//   const range = String(req.query.range || "7");
+//   const allowedRange = ["7", "30", "90", "all"];
+
+//   if (!allowedRange.includes(range)) {
+//     return res.status(400).json({
+//       success: false,
+//       message: "Invalid range",
+//     });
+//   }
+
+//   const now = new Date();
+//   let startDate: Date | null = null;
+
+//   if (range !== "all") {
+//     const days = Number(range);
+//     startDate = new Date();
+//     startDate.setHours(0, 0, 0, 0);
+//     startDate.setDate(startDate.getDate() - (days - 1));
+//   }
+//   const [
+//     totalContacts,
+//     pendingContacts,
+//     approvedContacts,
+
+//     totalFeedback,
+//     pendingFeedback,
+//     featuredFeedback,
+
+//     avgRatingResult,
+//   ] = await Promise.all([
+//     Contact.countDocuments(),
+//     Contact.countDocuments({ status: Status_Type.PENDING }),
+//     Contact.countDocuments({ status: Status_Type.APPROVED }),
+
+//     TestimonialComment.countDocuments(),
+//     TestimonialComment.countDocuments({ status: Status_Type.PENDING }),
+//     TestimonialComment.countDocuments({
+//       featured: true,
+//     }),
+
+//     TestimonialComment.aggregate([
+//       {
+//         $match: { status: Status_Type.APPROVED },
+//       },
+//       {
+//         $group: {
+//           _id: null,
+//           avgRating: { $avg: "$rating" },
+//         },
+//       },
+//     ]),
+//   ]);
+
+//   /* ------------------------------------------------------------------------ */
+//   /*                              APPROVAL RATE                               */
+//   /* ------------------------------------------------------------------------ */
+//   const contactApprovalRate =
+//     totalContacts > 0
+//       ? Math.round((approvedContacts / totalContacts) * 100)
+//       : 0;
+
+//   /* ------------------------------------------------------------------------ */
+//   /*                             AVERAGE RATING                               */
+//   /* ------------------------------------------------------------------------ */
+//   const avgRating = avgRatingResult[0]?.avgRating ?? 0;
+
+//   /* ------------------------------------------------------------------------ */
+//   /*                           ACTIVITY MATCH QUERY                           */
+//   /* ------------------------------------------------------------------------ */
+//   const activityMatchQuery = startDate
+//     ? {
+//         createdAt: {
+//           $gte: startDate,
+//           $lte: now,
+//         },
+//       }
+//     : {};
+
+//   const contactActivity = await Contact.aggregate([
+//     {
+//       $match: activityMatchQuery,
+//     },
+
+//     {
+//       $group: {
+//         _id: {
+//           $dateToString: {
+//             format: "%Y-%m-%d",
+//             date: "$createdAt",
+//           },
+//         },
+
+//         count: {
+//           $sum: 1,
+//         },
+//       },
+//     },
+
+//     {
+//       $sort: {
+//         _id: 1,
+//       },
+//     },
+//   ]);
+
+//   /* ------------------------------------------------------------------------ */
+//   /*                       GET FEEDBACK ACTIVITY DATA                         */
+//   /* ------------------------------------------------------------------------ */
+
+//   const feedbackActivity = await TestimonialComment.aggregate([
+//     {
+//       $match: activityMatchQuery,
+//     },
+
+//     {
+//       $group: {
+//         _id: {
+//           $dateToString: {
+//             format: "%Y-%m-%d",
+//             date: "$createdAt",
+//           },
+//         },
+
+//         count: {
+//           $sum: 1,
+//         },
+//       },
+//     },
+
+//     {
+//       $sort: {
+//         _id: 1,
+//       },
+//     },
+//   ]);
+
+//   /* ------------------------------------------------------------------------ */
+//   /*                    CONVERT ACTIVITY INTO LOOKUP MAPS                     */
+//   /* ------------------------------------------------------------------------ */
+
+//   const contactsMap = new Map(
+//     contactActivity.map((item) => [item._id, item.count]),
+//   );
+
+//   const feedbacksMap = new Map(
+//     feedbackActivity.map((item) => [item._id, item.count]),
+//   );
+
+//   /* ------------------------------------------------------------------------ */
+//   /*                              BUILD GRAPH DATA                            */
+//   /* ------------------------------------------------------------------------ */
+
+//   const activity = [];
+
+//   /*
+//     --------------------------------------------------------------------------
+//     7 / 30 / 90 DAYS
+//     --------------------------------------------------------------------------
+//   */
+
+//   if (startDate) {
+//     const days = Number(range);
+
+//     for (let i = days - 1; i >= 0; i--) {
+//       const date = new Date();
+
+//       date.setHours(0, 0, 0, 0);
+
+//       date.setDate(date.getDate() - i);
+
+//       const key = date.toISOString().split("T")[0];
+
+//       const label =
+//         days === 7
+//           ? date.toLocaleDateString("en-US", {
+//               month: "short",
+//               day: "numeric",
+//             })
+//           : date.toLocaleDateString("en-US", {
+//               month: "short",
+//               day: "numeric",
+//             });
+
+//       activity.push({
+//         date: i === 0 ? "Today" : label,
+
+//         contacts: contactsMap.get(key) ?? 0,
+
+//         feedbacks: feedbacksMap.get(key) ?? 0,
+//       });
+//     }
+//   }
+
+//   /*
+//     --------------------------------------------------------------------------
+//     ALL TIME
+//     --------------------------------------------------------------------------
+//   */
+//   else {
+//     /*
+//       Combine every date that exists in either collection.
+//     */
+
+//     const allDates = new Set([...contactsMap.keys(), ...feedbacksMap.keys()]);
+
+//     const sortedDates = [...allDates].sort();
+
+//     for (const dateString of sortedDates) {
+//       const date = new Date(`${dateString}T00:00:00`);
+
+//       activity.push({
+//         date: date.toLocaleDateString("en-US", {
+//           month: "short",
+//           day: "numeric",
+//           year: "numeric",
+//         }),
+
+//         contacts: contactsMap.get(dateString) ?? 0,
+
+//         feedbacks: feedbacksMap.get(dateString) ?? 0,
+//       });
+//     }
+//   }
+
+//   return res.status(200).json({
+//     success: true,
+//     data: {
+//       contacts: {
+//         total: totalContacts,
+//         pending: pendingContacts,
+//         approved: approvedContacts,
+//         approvalRate: contactApprovalRate,
+//       },
+
+//       feedbacks: {
+//         total: totalFeedback,
+//         pending: pendingFeedback,
+//         featured: featuredFeedback,
+//         averageRating: Number(avgRating.toFixed(1)),
+//       },
+//       activity,
+//     },
+//   });
+// });
+
+const getAdminDashboardStats = asyncHandler(async (_req, res) => {
+  const [
+    totalContacts,
+    pendingContacts,
+    approvedContacts,
+
+    totalFeedback,
+    pendingFeedback,
+    featuredFeedback,
+
+    // clientInquiries,
+    avgRatingResult,
+  ] = await Promise.all([
+    Contact.countDocuments(),
+
+    Contact.countDocuments({
+      status: Status_Type.PENDING,
+    }),
+
+    Contact.countDocuments({
+      status: Status_Type.APPROVED,
+    }),
+
     TestimonialComment.countDocuments(),
 
-    TestimonialComment.countDocuments({ status: Status_Type.PENDING }),
+    TestimonialComment.countDocuments({
+      status: Status_Type.PENDING,
+    }),
+
+    TestimonialComment.countDocuments({
+      featured: true,
+    }),
 
     TestimonialComment.aggregate([
       {
-        $match: { status: Status_Type.APPROVED },
+        $match: {
+          status: Status_Type.APPROVED,
+        },
       },
       {
         $group: {
           _id: null,
-          avgRating: { $avg: "$rating" },
+          avgRating: {
+            $avg: "$rating",
+          },
         },
       },
     ]),
   ]);
 
-  const avgRating = avgRatingResult[0]?.avgRating ?? 0;
+  const approvalRate =
+    totalContacts > 0
+      ? Math.round((approvedContacts / totalContacts) * 100)
+      : 0;
+
+  const averageRating = avgRatingResult[0]?.avgRating ?? 0;
 
   return res.status(200).json({
     success: true,
+
     data: {
-      totalFeedback,
-      pendingFeedback,
-      averageRating: Number(avgRating.toFixed(1)),
+      contacts: {
+        total: totalContacts,
+        pending: pendingContacts,
+        approved: approvedContacts,
+        approvalRate,
+      },
+
+      feedbacks: {
+        total: totalFeedback,
+        pending: pendingFeedback,
+        featured: featuredFeedback,
+        averageRating: Number(averageRating.toFixed(1)),
+      },
+    },
+  });
+});
+
+const getAdminDashboardActivity = asyncHandler(async (req, res) => {
+  const range = String(req.query.range ?? "7");
+
+  const allowedRanges = ["7", "30", "90", "all"];
+
+  if (!allowedRanges.includes(range)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid range",
+    });
+  }
+
+  const now = new Date();
+
+  let startDate: Date | null = null;
+
+  if (range !== "all") {
+    const days = Number(range);
+
+    startDate = new Date();
+
+    startDate.setHours(0, 0, 0, 0);
+
+    startDate.setDate(startDate.getDate() - (days - 1));
+  }
+
+  const activityMatchQuery = startDate
+    ? {
+        createdAt: {
+          $gte: startDate,
+          $lte: now,
+        },
+      }
+    : {};
+
+  const [contactActivity, feedbackActivity] = await Promise.all([
+    Contact.aggregate([
+      {
+        $match: activityMatchQuery,
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+            },
+          },
+
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]),
+
+    TestimonialComment.aggregate([
+      {
+        $match: activityMatchQuery,
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+            },
+          },
+
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]),
+  ]);
+
+  const contactsMap = new Map(
+    contactActivity.map((item) => [item._id, item.count]),
+  );
+
+  const feedbacksMap = new Map(
+    feedbackActivity.map((item) => [item._id, item.count]),
+  );
+
+  const activity: {
+    date: string;
+    contacts: number;
+    feedbacks: number;
+  }[] = [];
+
+  /* ---------------------------------------------------------------------- */
+  /*                             7 / 30 / 90 DAYS                           */
+  /* ---------------------------------------------------------------------- */
+
+  if (startDate) {
+    const days = Number(range);
+
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date();
+
+      date.setHours(0, 0, 0, 0);
+
+      date.setDate(date.getDate() - i);
+
+      const key = date.toISOString().split("T")[0];
+
+      const label = date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+
+      activity.push({
+        date: i === 0 ? "Today" : label,
+
+        contacts: contactsMap.get(key) ?? 0,
+
+        feedbacks: feedbacksMap.get(key) ?? 0,
+      });
+    }
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /*                               ALL TIME                                 */
+  /* ---------------------------------------------------------------------- */
+  else {
+    const allDates = [
+      ...new Set([...contactsMap.keys(), ...feedbacksMap.keys()]),
+    ].sort();
+
+    for (const dateString of allDates) {
+      const date = new Date(`${dateString}T00:00:00`);
+
+      activity.push({
+        date: date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }),
+
+        contacts: contactsMap.get(dateString) ?? 0,
+
+        feedbacks: feedbacksMap.get(dateString) ?? 0,
+      });
+    }
+  }
+
+  return res.status(200).json({
+    success: true,
+
+    data: activity,
+  });
+});
+
+const getCurrentAdmin = asyncHandler(async (req, res) => {
+  const admin = req.admin;
+
+  if (!admin) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized",
+    });
+  }
+  return res.status(200).json({
+    success: true,
+    data: {
+      id: admin.id,
+      fullName: admin.fullName,
+      email: admin.email,
     },
   });
 });
@@ -337,4 +739,6 @@ export {
   updateProjectStatus,
   toggleFeaturedFeedback,
   getAdminDashboardStats,
+  getAdminDashboardActivity,
+  getCurrentAdmin,
 };

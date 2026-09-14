@@ -3,6 +3,7 @@ import { Axios } from "../Config/Axios";
 import { API } from "./apiEndpoints";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { apiLogger } from "@/Config/Logger";
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPES                                    */
@@ -85,7 +86,7 @@ export const submitContact = createAsyncThunk<
     }
 
     toast.error(message);
-    console.error(err);
+    apiLogger.error("Failed to submit contact request", { error: err });
 
     return rejectWithValue(message);
   }
@@ -105,6 +106,11 @@ export const checkEmailStatus = createAsyncThunk(
       return res.data;
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
+        apiLogger.warn("Failed to check email status", {
+          status: err.response?.status,
+          code: err.code,
+        });
+
         return rejectWithValue(err.response?.data?.message || "Check failed");
       }
 
@@ -116,29 +122,6 @@ export const checkEmailStatus = createAsyncThunk(
 /* -------------------------------------------------------------------------- */
 /*                              SUBMIT FEEDBACK                               */
 /* -------------------------------------------------------------------------- */
-
-// export const submitFeedback = createAsyncThunk<
-//   ApiResponse,
-//   FeedbackPayload,
-//   { rejectValue: string }
-// >("feedback/submit", async (data, { rejectWithValue }) => {
-//   try {
-//     const res = await Axios.post(API.FEEDBACK.SUBMIT, data);
-
-//     toast.success(res.data.message);
-
-//     return res.data;
-//   } catch (err) {
-//     let message = "Unable to submit feedback.";
-
-//     if (axios.isAxiosError(err)) {
-//       message = err.response?.data.message || message;
-
-//       toast.error(message);
-//       return rejectWithValue(message);
-//     }
-//   }
-// });
 
 export const submitFeedback = createAsyncThunk<
   ApiResponse,
@@ -159,7 +142,16 @@ export const submitFeedback = createAsyncThunk<
 
     if (axios.isAxiosError(err)) {
       message = err.response?.data?.message ?? message;
+
+      apiLogger.warn("Failed to check email status", {
+        status: err.response?.status,
+        code: err.code,
+      });
     }
+
+    apiLogger.error("Unexpected error while checking email status", {
+      error: err,
+    });
 
     toast.error(message);
     return rejectWithValue(message);
@@ -191,7 +183,10 @@ export const getTopFeedback = createAsyncThunk<
       message = err.response?.data?.message || message;
     }
 
-    console.error(err);
+    apiLogger.error("Failed to fetch top feedback", {
+      error: err,
+    });
+
     return rejectWithValue(message);
   }
 });
@@ -226,6 +221,12 @@ export const getFeedback = createAsyncThunk<
       message = err.response?.data.message || message;
     }
 
+    apiLogger.error("Failed to fetch feedback", {
+      error: err,
+      page: params.page,
+      status: params.status,
+    });
+
     toast.error(message);
     return rejectWithValue(message);
   }
@@ -252,6 +253,11 @@ export const updateFeedback = createAsyncThunk<
     if (axios.isAxiosError(err)) {
       message = err.response?.data.message || message;
     }
+
+    apiLogger.error("Failed to update feedback", {
+      error: err,
+      feedbackId: id,
+    });
 
     toast.error(message);
     return rejectWithValue(message);
@@ -281,6 +287,11 @@ export const deleteFeedback = createAsyncThunk<
     if (axios.isAxiosError(error)) {
       message = error.response?.data?.message ?? message;
     }
+
+    apiLogger.error("Failed to delete feedback", {
+      error,
+      feedbackId: id,
+    });
 
     toast.error(message);
 

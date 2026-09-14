@@ -3,7 +3,7 @@ import { CodeXml, Brain, Layers, ShieldCheck } from "lucide-react";
 
 type AboutSection = {
   id: number;
-  icon: ComponentType<{
+  icon: ComponentType<{ 
     className?: string;
     size?: number;
   }>;

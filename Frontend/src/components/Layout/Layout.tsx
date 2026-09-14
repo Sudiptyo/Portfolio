@@ -33,8 +33,7 @@ const Layout = () => {
              shadow-[0_0_18px_rgba(139,92,246,0.8)]"
         />
       )}
-
-      <Navbar />
+      {pathname !== "/admin" && <Navbar />}
       <main className="pt-9">
         <Outlet />
       </main>

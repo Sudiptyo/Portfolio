@@ -13,6 +13,7 @@ import {
   updateFeedback,
   checkEmailStatus,
 } from "@/API/apiClientThunks";
+import { uiLogger } from "@/Config/Logger";
 
 const StatusType = {
   PENDING: "pending",
@@ -89,7 +90,9 @@ const FeedbackForm = () => {
           setShowNoAdminModal(true);
         }
       } catch (err) {
-        console.error("Failed email status check:", err);
+        uiLogger.warn("Failed email status check", {
+          error: err,
+        });
       }
     }, 600);
 
@@ -157,7 +160,10 @@ const FeedbackForm = () => {
         state: { scrollTo: "testimonial", scrollDuration: 2000 },
       });
     } catch (err) {
-      console.error(err);
+      uiLogger.error("Feedback form submission failed", {
+        error: err,
+        isEditing: Boolean(editingId),
+      });
     }
   };
 
