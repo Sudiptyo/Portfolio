@@ -3,12 +3,14 @@ import { ServiceSectionData } from "../../Utils/ServicesSection";
 const ServicesGrid = () => {
   return (
     <>
-      <div className="grid grid-cols-3 gap-8 mt-20 items-stretch">
+      {/* <div className="grid grid-cols-3 gap-8 mt-20 items-stretch"> */}
+      <div className="mt-14 grid grid-cols-1 items-stretch gap-5 sm:mt-16 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-8">
         {ServiceSectionData.map(
           ({ id, badge, icon: Icon, title, description }) => (
             <div
               key={id}
-              className="glass-card p-8 group hover:-translate-y-2 h-full"
+              // className="glass-card p-8 group hover:-translate-y-2 h-full"
+              className="glass-card group h-full p-5 hover:-translate-y-2 sm:p-8"
             >
               <div className="flex flex-col gap-4">
                 {badge && (

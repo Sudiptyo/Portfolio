@@ -4,7 +4,7 @@ import FooterFooter from "./FooterFooter";
 const Footer = () => {
   return (
     <>
-      <section className="relative min-h-screen py-30 px-30">
+      <section className="relative min-h-screen py-20 md:py-24 lg:py-30">
         <FooterHeader />
         <FooterFooter />
       </section>

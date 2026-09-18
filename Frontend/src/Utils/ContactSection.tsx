@@ -3,7 +3,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { FaGithub } from "react-icons/fa6";
 import { LuLinkedin } from "react-icons/lu";
 
-type ContactSection = {
+type ContactSection = { 
   ContactInfo: {
     text: string;
     items: {
@@ -40,13 +40,13 @@ export const ContactSectionData: ContactSection = {
         id: 2,
         icon: FaGithub,
         heading: "GitHub",
-        link: "https://www.linkedin.com/in/yourusername",
+        link: "https://github.com/Sudiptyo",
       },
       {
         id: 3,
         icon: LuLinkedin,
         heading: "LinkedIn",
-        link: "https://www.linkedin.com/in/yourusername",
+        link: "https://shorturl.at/gNZHF",
       },
     ],
   },

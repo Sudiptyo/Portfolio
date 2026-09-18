@@ -30,9 +30,11 @@ const FooterHeader = () => {
   return (
     <>
       <div className="">
-        <div className="glass-card p-20 text-center">
+        {/* <div className="glass-card p-20 text-center"> */}
+        <div className="glass-card p-6 text-center sm:p-10 lg:p-20">
           <div className="flex flex-col items-center">
-            <h2 className="text-6xl font-bold mb-6">
+            {/* <h2 className="text-6xl font-bold mb-6"> */}
+            <h2 className="mb-6 text-4xl font-bold sm:text-5xl lg:text-6xl">
               Let's build something
               <br />
               <span className="bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
@@ -40,15 +42,17 @@ const FooterHeader = () => {
               </span>
             </h2>
 
-            <p className="text-[#AAA3C2] text-xl mb-10 max-w-2xl mx-auto">
+            {/* <p className="text-[#AAA3C2] text-xl mb-10 max-w-2xl mx-auto"> */}
+            <p className="mx-auto mb-8 max-w-2xl text-base text-[#AAA3C2] sm:mb-10 sm:text-lg lg:text-xl">
               Have a project, idea, or opportunity? I'd love to hear from you.
               Let's connect and create something great.
             </p>
 
-            <div className="flex items-center justify-center gap-6 mb-10">
+            {/* <div className="flex items-center justify-center gap-6 mb-10"> */}
+            <div className="mb-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-6">
               <a
                 href="/contact"
-                className="btn-glow rounded-full bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 px-10 py-5 text-lg font-bold text-white"
+                className="btn-glow rounded-full bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 px-6 py-4 text-base sm:px-8 sm:text-lg lg:px-10 lg:py-5 font-bold text-white"
               >
                 Contact Me
               </a>

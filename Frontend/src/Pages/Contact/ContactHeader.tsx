@@ -4,12 +4,12 @@ const ContactHeader = () => {
       {/* ======================= Section Header ======================= */}
       <div className="flex flex-col items-center">
         {/* ---------- Section Label ---------- */}
-        <span className="text-[#0FD3FA] text-sm tracking-widest font-semibold">
+        <span className="text-[#0FD3FA] text-sm mb-4 tracking-widest font-semibold">
           GET IN TOUCH
         </span>
 
         {/* ---------- Section Title ---------- */}
-        <h1 className="text-6xl font-bold mt-4">
+        <h1 className="text-6xl font-bold text-center">
           Let's Work{" "}
           <span className="bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
             Together

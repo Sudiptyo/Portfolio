@@ -5,7 +5,7 @@ export const ContactValidationRules = {
       value: 3,
       message: "Name must be at least 3 characters",
     },
-  },
+  }, 
 
   email: {
     required: "Email is required",

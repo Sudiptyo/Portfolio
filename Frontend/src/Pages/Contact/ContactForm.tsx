@@ -22,7 +22,7 @@ const Project_Type = [
   "Other",
 ];
 
-type ContactFormData = { 
+type ContactFormData = {
   fullName: string;
   email: string;
   projectType: string;
@@ -105,7 +105,6 @@ const ContactForm = () => {
   const onSubmit = async (data: ContactFormData) => {
     try {
       const res = await dispatch(submitContact(data)).unwrap();
-      console.log(res);
       reset();
       navigate("/");
     } catch (err) {
@@ -123,7 +122,8 @@ const ContactForm = () => {
         whileHover={{
           y: -5,
         }}
-        className="glass-card h-fit px-10 py-10 transition-all duration-200"
+        className="glass-card h-fit p-7 sm:p-8 lg:p-10 transition-all duration-200"
+        // className="glass-card h-fit p-5 sm:p-8 lg:p-10 transition-all duration-200"
       >
         <form
           onSubmit={handleSubmit(onSubmit, (errors) => {
@@ -280,7 +280,8 @@ const ContactForm = () => {
           whileHover={{
             y: -5,
           }}
-          className="glass-card p-8 transition-all duration-200"
+className="glass-card p-5 sm:p-8 transition-all duration-200"
+          // className="glass-card p-8 transition-all duration-200"
         >
           <h3 className="text-xl font-bold mb-6">
             {ContactSectionData.ContactInfo.text}

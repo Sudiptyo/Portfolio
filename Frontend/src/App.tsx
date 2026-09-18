@@ -42,17 +42,10 @@ const App = () => {
         duration,
         delay: 0,
         smooth: "easeInOutCubic",
-        offset: -80,
+        offset: target === "about" ? -80 : 0,
       });
     });
   }, [location, navigate]);
-
-  useEffect(() => {
-    // Always start at the top when the site is freshly loaded.
-    if (!location.state?.scrollTo) {
-      window.scrollTo(0, 0);
-    }
-  }, []);
 
   return (
     <>

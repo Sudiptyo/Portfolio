@@ -8,10 +8,16 @@ import {
   useMotionValueEvent,
   animate,
 } from "framer-motion";
+import { useEffect } from "react";
 
 const Layout = () => {
   const { scrollYProgress } = useScroll();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname])
+
   const standAlonePage = ["/contact", "/admin", "/feedback"].includes(pathname);
 
   const scaleX = useMotionValue(0);

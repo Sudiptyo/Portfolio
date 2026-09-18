@@ -42,6 +42,7 @@ import { SiNextdotjs } from "react-icons/si";
 import { SiRabbitmq } from "react-icons/si";
 import { SiRedbull } from "react-icons/si";
 import { SiFastify } from "react-icons/si";
+import { SiPnpm } from "react-icons/si";
 
 type Skill = {
   idx: number;
@@ -308,12 +309,18 @@ export const SkillsSectionData: SkillSection[] = [
       },
       {
         idx: 10,
+        name: "PNPM",
+        icon: SiPnpm,
+        hoverText: "Fast, disk-efficient package manager",
+      },
+      {
+        idx: 11,
         name: "Maven",
         icon: SiApachemaven,
         hoverText: "Java build & dependency management",
       },
       {
-        idx: 11,
+        idx: 12,
         name: "PIP",
         icon: PackageOpen,
         hoverText: "Python package manager",

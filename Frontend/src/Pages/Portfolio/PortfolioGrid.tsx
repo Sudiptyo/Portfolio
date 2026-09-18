@@ -2,7 +2,8 @@ import { PortfolioSectionData } from "../../Utils/PortfolioSection";
 
 const PortfolioGrid = () => {
   return (
-    <div className="grid grid-cols-2 gap-8 mt-10">
+    // <div className="grid grid-cols-2 gap-8 mt-10">
+    <div className="mt-14 grid grid-cols-1 gap-8 sm:mt-16 sm:gap-6 lg:mt-20 lg:grid-cols-2 lg:gap-8">
       {PortfolioSectionData.map(
         ({
           id,
@@ -21,7 +22,8 @@ const PortfolioGrid = () => {
           >
             {/* ================= Header ================= */}
             <div
-              className="relative h-56 px-8 py-7"
+              // className="relative h-56 px-8 py-7"
+              className="relative h-48 px-5 py-5 sm:h-52 sm:px-6 sm:py-6 lg:h-56 lg:px-8 lg:py-7"
               style={{ background: upperCardColor }}
             >
               {/* Top Right */}
@@ -49,7 +51,7 @@ const PortfolioGrid = () => {
             </div>
 
             {/* ================= Content ================= */}
-            <div className="px-8 py-8">
+            <div className="px-5 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
               <h3 className="text-xl font-bold leading-tight text-white">
                 {title}
               </h3>
@@ -60,10 +62,11 @@ const PortfolioGrid = () => {
 
               <div className="my-8 h-px bg-white/8" />
 
-              <div className="flex gap-4">
+              {/* <div className="flex gap-4"> */}
+              <div className="flex flex-wrap gap-3 sm:gap-4">
                 <a
                   href={liveUrl}
-                  className="flex items-center gap-2 rounded-2xl border border-[#8E52EF]/40 bg-[#8E52EF]/10 px-6 py-3 font-medium text-[#8E52EF] transition-colors duration-300 hover:bg-[#8E52EF]/20"
+                  className="flex items-center gap-2 rounded-2xl border border-[#8E52EF]/40 bg-[#8E52EF]/10 px-4 py-3 sm:px-6 font-medium text-[#8E52EF] transition-colors duration-300 hover:bg-[#8E52EF]/20"
                 >
                   <LiveIcon size={14} />
                   <span className="text-sm">{liveText}</span>
@@ -71,7 +74,7 @@ const PortfolioGrid = () => {
 
                 <a
                   href={githubUrl}
-                  className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 font-medium text-[#BEB7D8] transition-colors duration-300 hover:bg-white/10"
+                  className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 sm:px-6 font-medium text-[#BEB7D8] transition-colors duration-300 hover:bg-white/10"
                 >
                   <GithubIcon size={14} />
                   <span className="text-sm">{githubText}</span>

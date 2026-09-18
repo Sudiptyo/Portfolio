@@ -1,6 +1,16 @@
 @import "tailwindcss";
 
+/* body {
+  font-family: "Space Grotesk", sans-serif;
+} */
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
 body {
+  overflow-x: hidden;
   font-family: "Space Grotesk", sans-serif;
 }
 

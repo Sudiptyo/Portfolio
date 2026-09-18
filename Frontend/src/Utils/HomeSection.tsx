@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
-import { FaGithub, FaLinkedinIn, FaPenNib } from "react-icons/fa";
+import { FaGithub, FaPenNib } from "react-icons/fa";
 import { MapPin, Rocket } from "lucide-react";
+import { FiLinkedin } from "react-icons/fi";
 
 type HomeSection = {
   header: {
@@ -83,7 +84,7 @@ export const HomeSectionData: HomeSection = {
     },
     {
       id: 2,
-      icon: FaLinkedinIn,
+      icon: FiLinkedin,
       link: "https://www.linkedin.com/in/sudiptyo-undefined-776472432?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     },
   ],

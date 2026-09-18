@@ -6,7 +6,7 @@ const DeepDiveHeader = () => {
           DEEP DIVE{" "}
         </span>
 
-        <h2 className="text-[48px] font-bold mt-3">
+        <h2 className="text-5xl font-bold mt-3 text-center">
           Featured{" "}
           <span className="bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
             Case Study

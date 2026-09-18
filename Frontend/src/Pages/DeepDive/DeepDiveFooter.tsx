@@ -4,7 +4,7 @@ import LanguageCarousel from "@/animations/LanguageCarousel";
 
 const DeepDiveFooter = () => {
   return (
-    <div className="glass-card mt-20 px-12 py-15">
+    <div className="glass-card mt-12 px-5 py-8 sm:mt-16 sm:px-8 sm:py-10 lg:mt-20 lg:px-12 lg:py-15">
       <div className="flex flex-col gap-12">
         {/* Upper Section */}
         <div className="flex flex-col items-center">
@@ -24,9 +24,10 @@ const DeepDiveFooter = () => {
 
         {/* Lower Section */}
         <div className="relative -mt-2">
-          <div className="absolute left-10 right-10 top-29 h-0.5 bg-linear-to-r from-transparent via-white/10 to-transparent" />
+          <div className="absolute left-10 right-10 top-29 hidden h-0.5 bg-linear-to-r from-transparent via-white/10 to-transparent lg:block" />
+          {/* <div className="absolute left-10 right-10 top-29 h-0.5 bg-linear-to-r from-transparent via-white/10 to-transparent" />  */}
 
-          <div className="relative z-10 flex items-start">
+          <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-start">
             {DeepDiveSectionData.lowerSection.map(
               (
                 {
@@ -40,7 +41,10 @@ const DeepDiveFooter = () => {
                 },
                 index,
               ) => (
-                <div key={id} className="flex flex-[1.35] items-start">
+                <div
+                  key={id}
+                  className="flex flex-col items-center lg:flex-1 lg:flex-row lg:items-start"
+                >
                   {/* Card */}
                   <div className="flex flex-1 flex-col items-center text-center">
                     <div
@@ -69,7 +73,7 @@ const DeepDiveFooter = () => {
 
                   {/* Arrow */}
                   {index !== DeepDiveSectionData.lowerSection.length - 1 && (
-                    <div className="flex w-10 shrink-0 items-start justify-center pt-6">
+                    <div className="hidden shrink-0 items-center justify-center py-2 lg:flex lg:w-10 lg:items-start lg:pt-6">
                       <HiArrowRight size={20} className="text-[#5D5874]" />
                     </div>
                   )}

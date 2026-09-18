@@ -4,12 +4,15 @@ import SkillsGrid from "./SkillsGrid";
 const Skills = () => {
   return (
     <>
-      <section id="skills" className="relative min-h-screen py-30">
+      <section
+        id="skills"
+        className="relative min-h-screen py-20 md:py-24 lg:py-30"
+      >
         <SkillsHeader />
         <SkillsGrid />
       </section>
     </>
   );
-}; 
+};
 
 export default Skills;

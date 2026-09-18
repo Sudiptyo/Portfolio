@@ -9,7 +9,8 @@ const About = () => {
         className="relative min-h-screen flex items-center mt-30"
       >
         {/* Container */}
-        <div className="flex flex-col gap-15">
+        <div className="flex w-full flex-col gap-8 lg:gap-15">
+          {/* <div className="flex w-full flex-col gap-15"> */}
           {/* Upper */}
           <div>
             <div>
@@ -17,7 +18,7 @@ const About = () => {
               <div className="relative flex flex-col gap-2 lg:gap-5 w-fit">
                 {/* Heading */}
                 <div className="flex items-center space-x-2 font-bold">
-                  <h1 className="text-[48px] text-white">About</h1>
+                  <h1 className="text-4xl sm:text-5xl lg:text-[48px]">About</h1>
 
                   <span className="text-[48px] bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
                     Me
@@ -31,10 +32,10 @@ const About = () => {
           </div>
 
           {/* Lower */}
-          <div className="grid grid-cols-[625px_620px] gap-12 items-start justify-between">
+          <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-12">
             {/* Lower - Left */}
-            <div className="flex flex-col gap-4 w-150 text-[18px] leading-8 text-[#AAA3C2]">
-              <p>
+            <div className="flex w-full flex-col gap-4 text-base leading-7 sm:text-lg sm:leading-8">
+              <p className="text-[#AAA3C2]">
                 I'm a{" "}
                 <span className="font-bold text-white">
                   Full Stack Developer
@@ -43,14 +44,14 @@ const About = () => {
                 complete digital products — not just interfaces.
               </p>
 
-              <p>
+              <p className="text-[#AAA3C2]">
                 I work across the entire stack — from designing intuitive user
                 experiences to developing scalable backend systems and APIs. My
                 goal is to create applications that are not only visually
                 appealing but also efficient, secure, and production-ready.
               </p>
 
-              <p>
+              <p className="text-[#AAA3C2]">
                 I have a strong interest in{" "}
                 <span className="font-bold text-white">
                   Data Structures & Algorithms
@@ -69,12 +70,14 @@ const About = () => {
             </div>
 
             {/* Lower - Right */}
-            <div className="w-155 ml-auto">
-              <div className="grid grid-cols-[300px_300px] gap-5">
+            <div className="w-full">
+              <div className="grid grid-cols-2 gap-4 sm:gap-5">
+                {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5"> */}
                 {/* Card 1 */}
                 <motion.div
                   whileHover={{ y: -6 }}
-                  className="glass-card h-31.25 px-9 py-7 flex flex-col justify-center"
+                  className="glass-card h-31.25 px-4 py-5 sm:px-8 sm:py-6 lg:px-9 lg:py-7 flex flex-col justify-center"
+                  // className="glass-card h-31.25 px-9 py-7 flex flex-col justify-center"
                 >
                   <h2 className="text-[38px] leading-none font-bold text-[#8E52EF]">
                     2+
@@ -87,7 +90,8 @@ const About = () => {
                 {/* Card 2 */}
                 <motion.div
                   whileHover={{ y: -6 }}
-                  className="glass-card h-29.5 px-8 py-6 flex flex-col justify-center"
+                  className="glass-card h-29.5 px-4 py-5 sm:px-8 sm:py-6 flex flex-col justify-center"
+                  // className="glass-card h-29.5 px-8 py-6 flex flex-col justify-center"
                 >
                   <h2 className="text-[38px] leading-none font-bold text-[#0FD3FA]">
                     10+
@@ -100,7 +104,8 @@ const About = () => {
                 {/* Card 3 */}
                 <motion.div
                   whileHover={{ y: -6 }}
-                  className="glass-card h-29.5 px-8 py-6 flex flex-col justify-center"
+                  className="glass-card h-29.5 px-4 py-5 sm:px-8 sm:py-6 flex flex-col justify-center"
+                  // className="glass-card h-29.5 px-8 py-6 flex flex-col justify-center"
                 >
                   <h2 className="text-[38px] leading-none font-bold text-[#A78BFA]">
                     200+
@@ -113,7 +118,8 @@ const About = () => {
                 {/* Card 4 */}
                 <motion.div
                   whileHover={{ y: -6 }}
-                  className="glass-card h-29.5 px-8 py-6 flex flex-col justify-center"
+                  className="glass-card h-29.5 px-4 py-5 sm:px-8 sm:py-6 flex flex-col justify-center"
+                  // className="glass-card h-29.5 px-8 py-6 flex flex-col justify-center"
                 >
                   <h2 className="text-[38px] leading-none font-bold text-[#10E6A5]">
                     5+
@@ -126,13 +132,13 @@ const About = () => {
                 {/* Bottom Card */}
                 <motion.div
                   whileHover={{ y: -6 }}
-                  className="glass-card col-span-2 h-75 px-8 py-7 flex flex-col"
+                  className="glass-card col-span-2 h-auto min-h-75 px-5 py-7 sm:min-h-75 sm:px-8"
+                  // className="glass-card col-span-1 sm:col-span-2 h-75 px-8 py-7 flex flex-col"
                 >
                   <h3 className="text-[18px] font-bold text-white">
                     What I Bring
                   </h3>
-
-                  <div className="flex-1 flex flex-col justify-between mt-4">
+                  <div className="flex flex-col gap-5 mt-5">
                     {aboutSectionData.map(
                       ({ id, icon: Icon, title, description }) => (
                         <div key={id} className="flex items-center gap-4">

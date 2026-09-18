@@ -2,7 +2,7 @@ const EducationHeader = () => {
   return (
     <>
       <div className="flex flex-col items-center">
-        <span className="text-[#0FD3FA] text-[14px] tracking-widest font-semibold">
+        <span className="text-[#0FD3FA] text-sm mb-4 tracking-widest font-semibold">
           BACKGROUND
         </span>
 
@@ -10,7 +10,7 @@ const EducationHeader = () => {
           Education
         </h2>
 
-        <p className="text-[#AAA3C2] text-[18px]">
+        <p className="text-[#AAA3C2] text-lg mt-3 text-center lg:mt-4">
           Academic foundation powering my design and development work
         </p>
       </div>

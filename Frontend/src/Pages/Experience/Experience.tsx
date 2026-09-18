@@ -4,7 +4,10 @@ import ExperienceHeader from "./ExperienceHeader";
 const Experience = () => {
   return (
     <>
-      <section id="experience" className="relative min-h-screen py-30">
+      <section
+        id="experience"
+        className="relative min-h-screen py-20 md:py-24 lg:py-30"
+      >
         <ExperienceHeader />
         <ExperienceFooter />
       </section>

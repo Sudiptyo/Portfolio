@@ -3,7 +3,8 @@ import { ProblemSolvingSectionData } from "../../Utils/ProblemSolvingSection";
 const ProblemSolvingGrid = () => {
   return (
     <>
-      <div className="grid grid-cols-[48%_52%] gap-8 pt-18">
+      <div className="grid grid-cols-1 gap-8 pt-14 sm:pt-16 lg:grid-cols-[48%_52%] lg:pt-18">
+        {/* <div className="grid grid-cols-[48%_52%] gap-8 pt-18"> */}
         {/* ================= Left Column ================= */}
         <div className="flex flex-col gap-8">
           {/* Upper Card */}
@@ -13,12 +14,14 @@ const ProblemSolvingGrid = () => {
               ({ id, icon: Icon, solved, subTitle, description, links }) => (
                 <div key={id}>
                   <div className="flex items-center gap-4">
-                    <div className="flex rounded-2xl p-4 w-14 h-14 items-center justify-center bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400">
+                    <div className="flex rounded-2xl p-4 size-12 sm:size-14 items-center justify-center bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400">
                       <Icon className="text-white" size={40} />
                     </div>
 
                     <div className="flex flex-col  bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                      <span className="text-[36px] font-bold">{solved}+</span>
+                      <span className="text-3xl sm:text-4xl font-bold">
+                        {solved}+
+                      </span>
 
                       <span className="text-[#AAA3C2] text-[14px] -mt-2">
                         {subTitle}
@@ -84,7 +87,8 @@ const ProblemSolvingGrid = () => {
         <div>
           <h3 className="text-white font-bold text-[18px] mb-6">Strong In</h3>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+            {/* <div className="grid grid-cols-2 gap-5"> */}
             {ProblemSolvingSectionData.strongIn.map(
               ({
                 id,
