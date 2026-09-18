@@ -14,13 +14,13 @@ const About = () => {
           {/* Upper */}
           <div>
             <div>
-              <p className="text-[14px] text-[#0FD3FA] font-bold">WHO I AM</p>
+              <p className="text-sm text-[#0FD3FA] font-bold">WHO I AM</p>
               <div className="relative flex flex-col gap-2 lg:gap-5 w-fit">
                 {/* Heading */}
                 <div className="flex items-center space-x-2 font-bold">
-                  <h1 className="text-4xl sm:text-5xl lg:text-[48px]">About</h1>
+                  <h1 className="text-4xl sm:text-5xl lg:text-5xl">About</h1>
 
-                  <span className="text-[48px] bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                  <span className="text-5xl bg-linear-to-r from-violet-500 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
                     Me
                   </span>
                 </div>
@@ -61,7 +61,7 @@ const About = () => {
                 clean solutions.
               </p>
 
-              <p className="text-cyan-400 font-medium text-[16px]">
+              <p className="text-cyan-400 font-medium text-base">
                 Currently expanding my expertise in cybersecurity and system
                 design to build more robust and secure applications. Actively
                 seeking internship opportunities in Full Stack or Backend
@@ -135,7 +135,7 @@ const About = () => {
                   className="glass-card col-span-2 h-auto min-h-75 px-5 py-7 sm:min-h-75 sm:px-8"
                   // className="glass-card col-span-1 sm:col-span-2 h-75 px-8 py-7 flex flex-col"
                 >
-                  <h3 className="text-[18px] font-bold text-white">
+                  <h3 className="text-lg font-bold text-white">
                     What I Bring
                   </h3>
                   <div className="flex flex-col gap-5 mt-5">
@@ -147,10 +147,10 @@ const About = () => {
                           </div>
 
                           <div>
-                            <p className="text-[14px] font-semibold text-white">
+                            <p className="text-sm font-semibold text-white">
                               {title}
                             </p>
-                            <p className="text-[12px] text-[#AAA3C2]">
+                            <p className="text-xs text-[#AAA3C2]">
                               {description}
                             </p>
                           </div>

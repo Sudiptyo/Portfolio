@@ -409,19 +409,19 @@ const AdminContacts = () => {
 
                     {/* Project */}
 
-                    <td className="min-w-[160px] px-4 py-4 text-sm text-[#B8B1CD]">
+                    <td className="min-w-40 px-4 py-4 text-sm text-[#B8B1CD]">
                       {contact.project}
                     </td>
 
                     {/* Budget */}
 
-                    <td className="min-w-[150px] px-4 py-4 text-sm text-[#B8B1CD]">
+                    <td className="min-w-37.5 px-4 py-4 text-sm text-[#B8B1CD]">
                       ${contact.budget.toLocaleString()}
                     </td>
 
                     {/* Message */}
 
-                    <td className="max-w-[220px] px-4 py-4">
+                    <td className="max-w-55 px-4 py-4">
                       <p className="truncate text-sm text-[#B8B1CD]">
                         {contact.message}
                       </p>
@@ -429,7 +429,7 @@ const AdminContacts = () => {
 
                     {/* Current Status */}
 
-                    <td className="min-w-[150px] px-4 py-4">
+                    <td className="min-w-37.5 px-4 py-4">
                       <div
                         className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${statusStyle.wrapper}`}
                       >
@@ -444,13 +444,13 @@ const AdminContacts = () => {
 
                     {/* Date */}
 
-                    <td className="min-w-[140px] whitespace-nowrap px-4 py-4 text-sm text-[#B8B1CD]">
+                    <td className="min-w-35 whitespace-nowrap px-4 py-4 text-sm text-[#B8B1CD]">
                       {contact.date}
                     </td>
 
                     {/* Change Status */}
 
-                    <td className="min-w-[220px] px-4 py-4">
+                    <td className="min-w-55 px-4 py-4">
                       {showSelectMode ? (
                         /* Only visible when toggled via header 3-dots */
                         <div

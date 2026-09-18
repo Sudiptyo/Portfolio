@@ -151,7 +151,7 @@ const Home = () => {
           <motion.p
             variants={fadeUp}
             custom={0.4}
-            className="mt-5 text-[16px] leading-relaxed text-[#AAA3C2] max-w-xl"
+            className="mt-5 text-base leading-relaxed text-[#AAA3C2] max-w-xl"
           >
             {HomeSectionData.descriptionDev}
           </motion.p>
@@ -161,7 +161,7 @@ const Home = () => {
           <motion.p
             variants={fadeUp}
             custom={0.5}
-            className="mt-5 text-[oklab(0.800338_-0.112242_-0.0872615/_0.8)] font-semibold text-[16px] max-w-xl"
+            className="mt-5 text-[oklab(0.800338_-0.112242_-0.0872615/_0.8)] font-semibold text-base max-w-xl"
           >
             {HomeSectionData.descriptionDsa}
           </motion.p>

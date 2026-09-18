@@ -323,7 +323,7 @@ const AdminFeedbacks = () => {
 
       <div className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-[#17132A]">
         <div className="w-full overflow-x-auto">
-          <table className="w-full min-w-[1080px] border-collapse">
+          <table className="w-full min-w-270 border-collapse">
             {/* ================= HEADER ================= */}
 
             <thead>
@@ -332,14 +332,14 @@ const AdminFeedbacks = () => {
                   <th
                     key={item.id}
                     className={`whitespace-nowrap px-4 py-4 text-left text-xs font-semibold uppercase tracking-wider text-[#AAA3C2]
-                      ${item.title === "Name" ? "w-[180px]" : ""}
-                      ${item.title === "Role" ? "w-[180px]" : ""}
-                      ${item.title === "Rating" ? "w-[105px]" : ""}
-                      ${item.title === "Comment" ? "w-[180px]" : ""}
-                      ${item.title === "Status" ? "w-[125px]" : ""}
-                      ${item.title === "Featured" ? "w-[125px]" : ""}
-                      ${item.title === "Date" ? "w-[110px]" : ""}
-                      ${item.title === "Actions" ? "w-[150px]" : ""}
+                      ${item.title === "Name" ? "w-45" : ""}
+                      ${item.title === "Role" ? "w-45" : ""}
+                      ${item.title === "Rating" ? "w-26.25" : ""}
+                      ${item.title === "Comment" ? "w-45" : ""}
+                      ${item.title === "Status" ? "w-31.25" : ""}
+                      ${item.title === "Featured" ? "w-31.25" : ""}
+                      ${item.title === "Date" ? "w-27.5" : ""}
+                      ${item.title === "Actions" ? "w-37.5" : ""}
                     `}
                   >
                     {item.title === "Actions" ? (

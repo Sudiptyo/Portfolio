@@ -23,14 +23,14 @@ const ProblemSolvingGrid = () => {
                         {solved}+
                       </span>
 
-                      <span className="text-[#AAA3C2] text-[14px] -mt-2">
+                      <span className="text-[#AAA3C2] text-sm -mt-2">
                         {subTitle}
                       </span>
                     </div>
                   </div>
 
                   <div className="pt-5">
-                    <span className="text-[16px] text-[#AAA3C2]">
+                    <span className="text-base text-[#AAA3C2]">
                       {description}
                     </span>
                   </div>
@@ -45,7 +45,7 @@ const ProblemSolvingGrid = () => {
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[14px] text-[#AAA3C2] group-hover:text-white transition-all duration-200"
+                          className="text-sm text-[#AAA3C2] group-hover:text-white transition-all duration-200"
                         >
                           {name}
                         </a>
@@ -66,13 +66,13 @@ const ProblemSolvingGrid = () => {
           <div className="glass-card p-8">
             {ProblemSolvingSectionData.approach.map(({ id, title, items }) => (
               <div key={id}>
-                <h3 className="text-white font-bold tracking-widest text-[14px]">
+                <h3 className="text-white font-bold tracking-widest text-sm">
                   {title}
                 </h3>
 
                 {items.map(({ id, text }) => (
                   <ul key={id} className="mt-4 flex flex-col gap-4">
-                    <li className="flex items-start gap-3 text-[#AAA3C2] text-[14px]">
+                    <li className="flex items-start gap-3 text-[#AAA3C2] text-sm">
                       <span className="mt-1.75 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0FD3FA]" />
                       <span>{text}</span>
                     </li>
@@ -85,7 +85,7 @@ const ProblemSolvingGrid = () => {
 
         {/* ================= Right Column ================= */}
         <div>
-          <h3 className="text-white font-bold text-[18px] mb-6">Strong In</h3>
+          <h3 className="text-white font-bold text-lg mb-6">Strong In</h3>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
             {/* <div className="grid grid-cols-2 gap-5"> */}

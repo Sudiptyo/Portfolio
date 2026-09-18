@@ -6,7 +6,6 @@ const EducationFooter = () => {
   return (
     <div className="mt-20 flex items-center justify-center">
       <div className="glass-card relative w-full max-w-235 overflow-hidden px-10 py-12">
-        {/* <div className="flex gap-8"> */}
         <div className="flex flex-col gap-6 sm:flex-row sm:gap-8">
           {/* Icon */}
           <div className="size-16 sm:size-22 shrink-0 rounded-2xl flex items-center justify-center bg-linear-to-br from-[hsl(263_83%_63%)]/30 to-[hsl(190_96%_52%)]/20 border border-[hsl(263_83%_63%)]/20 shadow-[0_0_20px_rgba(139,92,246,0.2)]">
@@ -16,7 +15,6 @@ const EducationFooter = () => {
           {/* Content */}
           <div className="flex flex-1 flex-col">
             {/* Title + Status */}
-            {/* <div className="flex items-start justify-between gap-8"> */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
               <div>
                 <h3 className="mb-2 text-2xl font-bold leading-tight text-white">

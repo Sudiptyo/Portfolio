@@ -2,7 +2,7 @@ const FeedbackHeader = () => {
   return (
     <>
       <div className="flex flex-col items-center">
-        <span className="text-[#0FD3FA] text-[14px] tracking-widest font-semibold">
+        <span className="text-[#0FD3FA] text-sm tracking-widest font-semibold">
           YOUR VOICE
         </span>
 

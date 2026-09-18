@@ -38,19 +38,9 @@ const TimelineItem = ({
   lg:grid-cols-[1fr_auto_1fr]
   lg:gap-12
 "
-      //       className="
-      //   grid
-      //   grid-cols-[20px_1fr]
-      //   items-start
-      //   gap-4
-      //   lg:grid-cols-[1fr_auto_1fr]
-      //   lg:items-center
-      //   lg:gap-12
-      // "
     >
       {/* Left Card */}
       <div className="col-start-2 row-start-1 flex justify-start lg:col-start-1 lg:row-auto lg:justify-end">
-        {/* <div className="col-start-2 row-start-1 flex justify-start lg:col-start-1 lg:row-auto lg:justify-end"> */}
         {isLeft && (
           <ExperienceCard
             experience={experience}
@@ -62,7 +52,6 @@ const TimelineItem = ({
 
       {/* Timeline Dot */}
       <div className="relative col-start-1 row-start-1 flex items-center justify-center lg:col-auto lg:row-auto">
-        {/* <div className="relative flex items-center justify-center"> */}
         {isActive && (
           <span className="absolute size-5 animate-ping rounded-full bg-[#0FD3FA] opacity-75" />
         )}
@@ -95,7 +84,6 @@ const TimelineItem = ({
 
       {/* Right Card */}
       <div className="col-start-2 row-start-1 flex justify-start lg:col-start-3 lg:row-auto">
-        {/* <div className="flex justify-start"> */}
         {!isLeft && (
           <ExperienceCard
             experience={experience}
@@ -133,22 +121,6 @@ const ExperienceFooter = () => {
   lg:-translate-x-1/2
 "
       />
-      {/* <motion.div
-        initial={{ scaleY: 0 }}
-        whileInView={{ scaleY: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.2 }}
-        className="
-          absolute
-          left-1/2
-          top-0
-          bottom-0
-          w-px
-          origin-top
-          -translate-x-1/2
-          bg-white/10
-        "
-      /> */}
 
       {/* Timeline Items */}
       <div className="space-y-28">

@@ -17,7 +17,7 @@ const ServicesGrid = () => {
                   <div className="inline-flex self-start px-2.5 py-1 bg-purple-600/10 rounded-2xl">
                     <div className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 bg-[#8E52EF] rounded-full"></span>
-                      <span className="text-[12px] text-[#8E52EF]">
+                      <span className="text-xs text-[#8E52EF]">
                         {badge}
                       </span>
                     </div>

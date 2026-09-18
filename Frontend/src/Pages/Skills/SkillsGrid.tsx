@@ -26,7 +26,7 @@ const SkillsGrid = () => {
 
                 <h3
                   style={{ color: titleColor }}
-                  className="text-[14px] font-bold"
+                  className="text-sm font-bold"
                 >
                   {title}
                 </h3>
@@ -65,7 +65,7 @@ const SkillsGrid = () => {
                         >
                           <Icon className="size-3.5" />
                         </span>
-                        <span className="text-[12px] font-medium text-[#AAA3C2] group-hover:text-white">
+                        <span className="text-xs font-medium text-[#AAA3C2] group-hover:text-white">
                           {name}
                         </span>
                       </motion.div>
@@ -85,7 +85,7 @@ const SkillsGrid = () => {
         offset={7} // The lower the closer
         opacity={1}
         delayShow={80}
-        className="rounded-4xl! border! border-[hsl(var(--border))]! bg-[hsl(var(--background))]! text-[12px]! text-white! shadow-lg! whitespace-nowrap!"
+        className="rounded-4xl! border! border-[hsl(var(--border))]! bg-[hsl(var(--background))]! text-xs! text-white! shadow-lg! whitespace-nowrap!"
         classNameArrow="!bg-[hsl(var(--background))]"
       />
     </>
